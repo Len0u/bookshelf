@@ -1,0 +1,64 @@
+.my-shelf {
+  margin: 2rem;
+  padding: 1rem;
+  background-color: #fefcf9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-family: "Optima", sans-serif;
+}
+
+.my-shelf h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #444;
+  text-align: center;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+.view-shelf-button,
+.view-tbr-shelf-button,
+.view-reading-shelf-button,
+.view-finished-shelf-button {
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f5c518;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.view-shelf-button:hover,
+.view-tbr-shelf-button:hover,
+.view-reading-shelf-button:hover,
+.view-finished-shelf-button:hover {
+  background-color: #e0af00;
+}
+
+.shelf-counts {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.shelf-counts p {
+  margin: 0.3rem 0;
+}
+
+p {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  margin-top: 2rem;
+}

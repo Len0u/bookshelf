@@ -3,6 +3,7 @@ import { searchBooks } from "../services/api";
 import BookCard from "../components/BookCard";
 import { useBookContext } from "../contexts/BookContext";
 import ReadingGoal from "../components/ReadingGoal";
+import Shelf from "./Shelf";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,7 +26,7 @@ function Home() {
       setViewingShelf("");
     } catch (err) {
       console.log(err);
-      setError("Failed to search movies");
+      setError("Failed to search books");
     } finally {
       setLoading(false);
     }
@@ -49,6 +50,7 @@ function Home() {
     }
   }, [shelf, viewingShelf]);
 
+
   return (
     <div className="home">
       <ReadingGoal />
@@ -64,43 +66,15 @@ function Home() {
           Search
         </button>
       </form>
-      <button
-        type="button"
-        className="view-shelf-button"
-        onClick={() => setViewingShelf("home")}
-      >
-        My Shelf
-      </button>
-
-      <button
-        type="button"
-        className="view-finishedshelf-button"
-        onClick={() => setViewingShelf("finished")}
-      >
-        Finished Books
-      </button>
-
-      <button
-        type="button"
-        className="view-tbrshelf-button"
-        onClick={() => setViewingShelf("tbr")}
-      >
-        TBR
-      </button>
-
-      {error && <div className="error-message"> {error} </div>}
-
-      {loading ? (
-        <div className="loading"> Loading...</div>
-      ) : (
+      {searchQuery && books.length > 0 ? (
         <div className="book-grid">
           {books.map((book) => (
             <BookCard book={book} key={book.id} />
           ))}
         </div>
+      ) : (
+        <Shelf />
       )}
-
-    {books.length === 0 && <p>No books to show</p>}
     </div>
   );
 }

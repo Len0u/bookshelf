@@ -1,14 +1,9 @@
+import "../css/BookCard.css"
 import { useBookContext } from "../contexts/BookContext";
 
 function BookCard({ book }) {
-  const {
-    shelf,
-    onShelf,
-    addToShelf,
-    removeFromShelf,
-    toggleFinished,
-    toggleTbr,
-  } = useBookContext();
+  const { shelf, onShelf, addToShelf, removeFromShelf, updateStatus } =
+    useBookContext();
   const shelved = onShelf(book.id);
   const info = book.volumeInfo;
   const shelfBook = shelf.find((b) => b.id === book.id);
@@ -18,6 +13,7 @@ function BookCard({ book }) {
     if (shelved) removeFromShelf(book.id);
     else addToShelf(book);
   };
+
   return (
     <div className="book-card">
       <div className="book-thumbnail">
@@ -26,7 +22,7 @@ function BookCard({ book }) {
         )}
         <div className="book-overlay">
           <button
-            className={`shelf-btn ${shelved ? "-active" : ""}`}
+            className= "shelf-btn" //{`shelf-btn ${shelved ? "-active" : ""}`}
             onClick={onShelfClick}
             title={shelved ? "Remove from shelf" : "Add to shelf"}
           >
@@ -40,20 +36,16 @@ function BookCard({ book }) {
         {shelved && (
           <>
             <label>
-              <input
-                type="checkbox"
-                checked={shelfBook.tbr}
-                onChange={() => toggleTbr(book.id)}
-              />
-              Tbr
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={shelfBook.finished}
-                onChange={() => toggleFinished(book.id)}
-              />
-              Finished
+              Status:{" "}
+              <select
+                className={`status-dropdown ${shelfBook?.status || "tbr"}`}
+                value={shelfBook?.status || "tbr"}
+                onChange={(e) => updateStatus(book.id, e.target.value)}
+              >
+                <option value="tbr">To Be Read</option>
+                <option value="reading">Reading</option>
+                <option value="finished">Finished</option>
+              </select>
             </label>
           </>
         )}

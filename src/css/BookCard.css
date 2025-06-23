@@ -1,0 +1,98 @@
+.book-card {
+  flex: 0 0 200px;
+  height: 320px;
+  padding: 1rem;
+  border-radius: 10px;
+  background: #fffef8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+}
+
+.book-thumbnail {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.book-thumbnail img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.book-overlay {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.shelf-btn {
+  background-color: #f5c518;
+  border: none;
+  font-size: 1.2rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.shelf-btn:hover {
+  background-color: #e0af00;
+}
+
+.book-info {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.book-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.4rem 0;
+  line-height: 1.2em;
+  max-height: 2.4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.book-info p {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0.2rem 0 0.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-dropdown {
+  font-size: 0.8rem;
+  padding: 0.2rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  color: white
+}
+
+.status-dropdown.finished {
+  background-color: red
+}
+
+.status-dropdown.tbr {
+  background-color: green
+}
+
+.status-dropdown.reading {
+  background-color: blue
+}

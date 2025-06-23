@@ -7,16 +7,19 @@ import BookCard from "./components/BookCard";
 import { BookProvider } from "./contexts/BookContext";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
+import "./css/App.css"
 
 function App() {
   return (
     <BookProvider>
       <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shelf" element={<Shelf />} />
-        <Route path="/goals" element={<Goals />} />
-      </Routes>
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/shelf" element={<Shelf />} />
+          <Route path="/goals" element={<Goals />} />
+        </Routes>
+      </main>
     </BookProvider>
   );
 }

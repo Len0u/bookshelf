@@ -1,0 +1,9 @@
+.main-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: burlywood;
+  font-family: "Optima", sans-serif;
+  color: darkgoldenrod
+  
+}
