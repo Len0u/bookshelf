@@ -11,7 +11,7 @@ export const BookProvider = ({ children }) => {
   });
 
   const [readingGoal, setReadingGoal] = useState(() => {
-    const saved = localStorage.getItem("goal");
+    const saved = localStorage.getItem("readingGoal");
     return saved ? JSON.parse(saved) : 0;
   });
 
@@ -30,7 +30,7 @@ export const BookProvider = ({ children }) => {
     setShelf((prev) => {
       if (prev.some((b) => b.id === book.id)) return prev;
       //add finished, with default not finished
-      return [...prev, { ...book, finished: false }];
+      return [...prev, { ...book, tbr: false, finished: false }];
     });
   };
 
@@ -50,12 +50,21 @@ export const BookProvider = ({ children }) => {
     );
   };
 
+  const toggleTbr = (bookId) => {
+    setShelf((prev) =>
+      prev.map((book) =>
+        book.id === bookId ? { ...book, tbr: !book.tbr } : book
+      )
+    );
+  };
+
   const value = {
     shelf,
     addToShelf,
     removeFromShelf,
     onShelf,
     toggleFinished, 
+    toggleTbr,
     readingGoal,
     setReadingGoal,
     finishedCount

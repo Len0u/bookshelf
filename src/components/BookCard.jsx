@@ -1,11 +1,18 @@
 import { useBookContext } from "../contexts/BookContext";
 
 function BookCard({ book }) {
-  const { shelf, onShelf, addToShelf, removeFromShelf, toggleFinished } = useBookContext();
-  const shelved = onShelf(book.id)
+  const {
+    shelf,
+    onShelf,
+    addToShelf,
+    removeFromShelf,
+    toggleFinished,
+    toggleTbr,
+  } = useBookContext();
+  const shelved = onShelf(book.id);
   const info = book.volumeInfo;
   const shelfBook = shelf.find((b) => b.id === book.id);
-  
+
   const onShelfClick = (e) => {
     e.preventDefault();
     if (shelved) removeFromShelf(book.id);
@@ -21,8 +28,9 @@ function BookCard({ book }) {
           <button
             className={`shelf-btn ${shelved ? "-active" : ""}`}
             onClick={onShelfClick}
+            title={shelved ? "Remove from shelf" : "Add to shelf"}
           >
-            +
+            {shelved ? "-" : "+"}
           </button>
         </div>
       </div>
@@ -30,14 +38,24 @@ function BookCard({ book }) {
         <h3>{info.title}</h3>
         <p>{info.authors}</p>
         {shelved && (
-          <label>
-            <input
-              type="checkbox"
-              checked={shelfBook.finished}
-              onChange={() => toggleFinished(book.id)}
-            />
-            Finished
-          </label>
+          <>
+            <label>
+              <input
+                type="checkbox"
+                checked={shelfBook.tbr}
+                onChange={() => toggleTbr(book.id)}
+              />
+              Tbr
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={shelfBook.finished}
+                onChange={() => toggleFinished(book.id)}
+              />
+              Finished
+            </label>
+          </>
         )}
       </div>
     </div>

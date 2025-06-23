@@ -22,20 +22,26 @@ function ReadingGoal() {
           min="0"
         />
       </label>
-      <p>{finishedCount} of {readingGoal} books finished</p>
-      <div style={{
-        background: "#ddd",
-        borderRadius: "1rem",
-        height: "20px",
-        width: "100%",
-        marginTop: "0.5rem"
-      }}>
-        <div style={{
-          background: "#4caf50",
-          height: "100%",
-          width: `${progress}%`,
-          borderRadius: "1rem"
-        }} />
+      <p>
+        {finishedCount} of {readingGoal} books finished
+      </p>
+      <div
+        style={{
+          background: "#ddd",
+          borderRadius: "1rem",
+          height: "20px",
+          width: "100%",
+          marginTop: "0.5rem",
+        }}
+      >
+        <div
+          style={{
+            background: "#4caf50",
+            height: "100%",
+            width: `${progress}%`,
+            borderRadius: "1rem",
+          }}
+        />
       </div>
     </div>
   );
