@@ -24,13 +24,15 @@ export const BookProvider = ({ children }) => {
     localStorage.setItem("readingGoal", JSON.stringify(readingGoal));
   }, [readingGoal]);
 
-  const finishedCount = shelf.filter((book) => book.status === "finished").length;
+  const finishedCount = shelf.filter(
+    (book) => book.status === "finished"
+  ).length;
 
   const addToShelf = (book) => {
     setShelf((prev) => {
       if (prev.some((b) => b.id === book.id)) return prev;
       //add finished, with default not finished
-      return [...prev, { ...book, status: "tbr"}];
+      return [...prev, { ...book, status: "tbr", rating: 0, review: "" }];
     });
   };
 
@@ -50,6 +52,22 @@ export const BookProvider = ({ children }) => {
     );
   };
 
+  const updateRating = (bookId, newRating) => {
+    setShelf((prev) =>
+      prev.map((book) =>
+        book.id === bookId ? { ...book, rating: Number(newRating) } : book
+      )
+    );
+  };
+
+  const updateReview = (bookId, newReview) => {
+    setShelf((prev) =>
+      prev.map((book) =>
+        book.id === bookId ? { ...book, review: newReview } : book
+      )
+    );
+  };
+
   const value = {
     shelf,
     addToShelf,
@@ -58,7 +76,9 @@ export const BookProvider = ({ children }) => {
     updateStatus,
     readingGoal,
     setReadingGoal,
-    finishedCount
+    finishedCount,
+    updateRating,
+    updateReview
   };
   return <BookContext.Provider value={value}>{children}</BookContext.Provider>;
 };
