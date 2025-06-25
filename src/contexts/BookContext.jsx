@@ -32,7 +32,14 @@ export const BookProvider = ({ children }) => {
     setShelf((prev) => {
       if (prev.some((b) => b.id === book.id)) return prev;
       //add finished, with default not finished
-      return [...prev, { ...book, status: "tbr", rating: 0, review: "" }];
+      return [...prev, { 
+        ...book, 
+        status: "tbr", 
+        rating: 0, 
+        review: "",
+        startDate: "",
+        endDate: ""
+      }];
     });
   };
 
@@ -68,6 +75,22 @@ export const BookProvider = ({ children }) => {
     );
   };
 
+  const updateStartDate = (bookId, newStartDate) => {
+    setShelf((prev) =>
+      prev.map((book) =>
+        book.id === bookId ? { ...book, startDate: newStartDate } : book
+      )
+    );
+  };
+
+  const updateEndDate = (bookId, newEndDate) => {
+    setShelf((prev) =>
+      prev.map((book) =>
+        book.id === bookId ? { ...book, endDate: newEndDate } : book
+      )
+    );
+  };
+
   const value = {
     shelf,
     addToShelf,
@@ -78,7 +101,9 @@ export const BookProvider = ({ children }) => {
     setReadingGoal,
     finishedCount,
     updateRating,
-    updateReview
+    updateReview,
+    updateStartDate,
+    updateEndDate
   };
   return <BookContext.Provider value={value}>{children}</BookContext.Provider>;
 };

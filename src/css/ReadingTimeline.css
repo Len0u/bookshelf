@@ -1,0 +1,264 @@
+.reading-timeline {
+  margin: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: #fbfbf4;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+}
+
+.reading-timeline h3 {
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.timeline-empty {
+  text-align: center;
+  padding: var(--spacing-lg);
+  color: var(--text-muted);
+}
+
+.timeline-empty p {
+  margin: var(--spacing-sm) 0;
+  font-style: italic;
+}
+
+.timeline-container {
+  margin-top: var(--spacing-md);
+}
+
+/* Chart Container */
+.chart-container {
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-md);
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid #e0e0e0;
+}
+
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: var(--spacing-sm);
+  min-height: 250px;
+  padding: var(--spacing-md) 0;
+}
+
+/* Month Bar Container */
+.month-bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 60px;
+}
+
+.month-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+  font-weight: 500;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.month-bar {
+  width: 100%;
+  min-height: 20px;
+  max-width: 50px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.month-total {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: var(--spacing-xs);
+  text-align: center;
+}
+
+/* Bar Segments */
+.bar-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20px;
+  position: relative;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.bar-segment:last-child {
+  border-bottom: none;
+}
+
+.bar-segment:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.segment-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  z-index: 2;
+  text-align: center;
+  line-height: 1;
+  padding: 1px;
+}
+
+/* Legend */
+.timeline-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.legend-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Remove status-specific colors since we're using individual book colors */
+.bar-segment.finished,
+.bar-segment.reading,
+.bar-segment.tbr {
+  /* Individual colors are set inline */
+}
+
+.bar-segment.tbr .segment-label {
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Statistics */
+.timeline-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid #e0e0e0;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 120px;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .chart-bars {
+    gap: var(--spacing-xs);
+    min-height: 200px;
+  }
+  
+  .month-bar-container {
+    min-width: 40px;
+  }
+  
+  .month-label {
+    font-size: 0.7rem;
+    height: 50px;
+  }
+  
+  .month-bar {
+    max-width: 35px;
+  }
+  
+  .segment-label {
+    font-size: 0.65rem;
+  }
+  
+  .timeline-legend {
+    gap: var(--spacing-md);
+  }
+  
+  .legend-item {
+    font-size: 0.8rem;
+  }
+  
+  .timeline-stats {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .stat-item {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .reading-timeline {
+    margin: var(--spacing-sm);
+    padding: var(--spacing-sm);
+  }
+  
+  .chart-container {
+    padding: var(--spacing-sm);
+  }
+  
+  .chart-bars {
+    min-height: 180px;
+  }
+  
+  .month-bar-container {
+    min-width: 30px;
+  }
+  
+  .month-bar {
+    max-width: 25px;
+  }
+  
+  .timeline-legend {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+} 

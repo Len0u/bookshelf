@@ -1,3 +1,10 @@
+.reading-goals-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin: 0;
+}
+
 .reading-stats {
   margin: var(--spacing-md);
   padding: var(--spacing-md) var(--spacing-lg);
@@ -98,5 +105,12 @@
   .pie-charts {
     flex-direction: row;
     justify-content: space-around;
+  }
+}
+
+/* Responsive design for the container */
+@media (max-width: 768px) {
+  .reading-goals-container {
+    gap: var(--spacing-md);
   }
 }

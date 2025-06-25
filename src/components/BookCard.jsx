@@ -12,6 +12,8 @@ function BookCard({ book }) {
     updateStatus,
     updateRating,
     updateReview,
+    updateStartDate,
+    updateEndDate,
   } = useBookContext();
   const shelved = onShelf(book.id);
   const info = book.volumeInfo;
@@ -33,6 +35,20 @@ function BookCard({ book }) {
 
   const handleRatingClick = (value) => {
     updateRating(book.id, value);
+  };
+
+  const handleStartDateChange = (e) => {
+    updateStartDate(book.id, e.target.value);
+  };
+
+  const handleEndDateChange = (e) => {
+    updateEndDate(book.id, e.target.value);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
   };
 
   return (
@@ -68,6 +84,39 @@ function BookCard({ book }) {
                 <option value="finished">Finished</option>
               </select>
             </label>
+            
+            {/* Date inputs */}
+            <div className="date-inputs">
+              <label className="date-label">
+                Start Date:
+                <input
+                  type="date"
+                  value={shelfBook?.startDate || ""}
+                  onChange={handleStartDateChange}
+                  className="date-input"
+                />
+              </label>
+              
+              <label className="date-label">
+                End Date:
+                <input
+                  type="date"
+                  value={shelfBook?.endDate || ""}
+                  onChange={handleEndDateChange}
+                  className="date-input"
+                />
+              </label>
+            </div>
+
+            {/* Display reading duration if both dates are set */}
+            {shelfBook?.startDate && shelfBook?.endDate && (
+              <div className="reading-duration">
+                <span className="duration-text">
+                  Reading time: {formatDate(shelfBook.startDate)} - {formatDate(shelfBook.endDate)}
+                </span>
+              </div>
+            )}
+
             <label className="rating-label">
               Rating:
               <div className="star-rating">
