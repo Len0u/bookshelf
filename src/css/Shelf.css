@@ -14,6 +14,18 @@
   text-align: center;
 }
 
+/* Book Grid Layout - Override App.css grid layout */
+.my-shelf .book-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)) !important;
+  gap: var(--spacing-lg) !important;
+  width: 100% !important;
+  margin: var(--spacing-md) 0 !important;
+  min-width: 0 !important;
+  justify-content: start !important;
+  align-items: start !important;
+}
+
 /* Filter buttons */
 .view-shelf-button,
 .view-tbr-shelf-button,
@@ -68,4 +80,16 @@
 
 .empty-state p {
   margin: var(--spacing-sm) 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .my-shelf {
+    margin: var(--spacing-md);
+    padding: var(--spacing-sm);
+  }
+  
+  .my-shelf .book-grid {
+    gap: var(--spacing-md) !important;
+  }
 }

@@ -53,70 +53,79 @@ function BookCard({ book }) {
 
   return (
     <div className="book-card">
-      <div className="book-thumbnail">
-        {info.imageLinks?.thumbnail && (
-          <img src={info.imageLinks.thumbnail} alt={info.title} />
-        )}
-        <div className="book-overlay">
-          <button
-            className="shelf-btn" //{`shelf-btn ${shelved ? "-active" : ""}`}
-            onClick={onShelfClick}
-            title={shelved ? "Remove from shelf" : "Add to shelf"}
-          >
-            {shelved ? "X" : "+"}
-          </button>
+      <div className="book-left-section">
+        <div className="book-thumbnail">
+          {info.imageLinks?.thumbnail && (
+            <img src={info.imageLinks.thumbnail} alt={info.title} />
+          )}
+          <div className="book-overlay">
+            <button
+              className="shelf-btn"
+              onClick={onShelfClick}
+              title={shelved ? "Remove from shelf" : "Add to shelf"}
+            >
+              {shelved ? "X" : "+"}
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="book-info">
-        <h3>{info.title}</h3>
-        <p>{info.authors}</p>
-        {shelved && (
-          <>
-            <label>
-              Status:{" "}
-              <select
-                className={`status-dropdown ${shelfBook?.status || "tbr"}`}
-                value={shelfBook?.status || "tbr"}
-                onChange={(e) => updateStatus(book.id, e.target.value)}
-              >
-                <option value="tbr">To Be Read</option>
-                <option value="reading">Reading</option>
-                <option value="finished">Finished</option>
-              </select>
-            </label>
-            
-            {/* Date inputs */}
-            <div className="date-inputs">
-              <label className="date-label">
-                Start Date:
-                <input
-                  type="date"
-                  value={shelfBook?.startDate || ""}
-                  onChange={handleStartDateChange}
-                  className="date-input"
-                />
-              </label>
-              
-              <label className="date-label">
-                End Date:
-                <input
-                  type="date"
-                  value={shelfBook?.endDate || ""}
-                  onChange={handleEndDateChange}
-                  className="date-input"
-                />
+        
+        <div className="book-basic-info">
+          <h3>{info.title}</h3>
+          <p className="authors">{info.authors}</p>
+          {shelved && (
+            <div className="status-section">
+              <label>
+                Status:{" "}
+                <select
+                  className={`status-dropdown ${shelfBook?.status || "tbr"}`}
+                  value={shelfBook?.status || "tbr"}
+                  onChange={(e) => updateStatus(book.id, e.target.value)}
+                >
+                  <option value="tbr">To Be Read</option>
+                  <option value="reading">Reading</option>
+                  <option value="finished">Finished</option>
+                </select>
               </label>
             </div>
+          )}
+        </div>
+      </div>
+      
+      {shelved && (
+        <div className="book-details">
+          {/* Date inputs */}
+          <div className="date-inputs">
+            <label className="date-label">
+              Start Date:
+              <input
+                type="date"
+                value={shelfBook?.startDate || ""}
+                onChange={handleStartDateChange}
+                className="date-input"
+              />
+            </label>
+            
+            <label className="date-label">
+              End Date:
+              <input
+                type="date"
+                value={shelfBook?.endDate || ""}
+                onChange={handleEndDateChange}
+                className="date-input"
+              />
+            </label>
+          </div>
 
-            {/* Display reading duration if both dates are set */}
-            {shelfBook?.startDate && shelfBook?.endDate && (
-              <div className="reading-duration">
-                <span className="duration-text">
-                  Reading time: {formatDate(shelfBook.startDate)} - {formatDate(shelfBook.endDate)}
-                </span>
-              </div>
-            )}
+          {/* Display reading duration if both dates are set */}
+          {shelfBook?.startDate && shelfBook?.endDate && (
+            <div className="reading-duration">
+              <span className="duration-text">
+                Reading time: {formatDate(shelfBook.startDate)} - {formatDate(shelfBook.endDate)}
+              </span>
+            </div>
+          )}
 
+          <div className="rating-section">
             <label className="rating-label">
               Rating:
               <div className="star-rating">
@@ -132,52 +141,52 @@ function BookCard({ book }) {
                 ))}
               </div>
             </label>
+          </div>
 
-            {editingReview ? (
-              <div className="review-text-box">
-                <textarea
-                  value={reviewText}
-                  onChange={(e) => setReviewText(e.target.value)}
-                  placeholder="Write your thoughts..."
-                  className="review-text-area"
-                />
-                <button onClick={handleSave} className="save-review-button">
-                  Save
-                </button>
+          {editingReview ? (
+            <div className="review-text-box">
+              <textarea
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                placeholder="Write your thoughts..."
+                className="review-text-area"
+              />
+              <button onClick={handleSave} className="save-review-button">
+                Save
+              </button>
+            </div>
+          ) : shelfBook?.review ? (
+            <div className="review-text">
+              <p className={showFullReview ? "expanded" : "collapsed"}>
+                {shelfBook.review}
+              </p>
+              <div className="review-text-actions">
+              <button onClick={() => setShowFullReview(!showFullReview)}>
+                {showFullReview ? "Show Less" : "Show More"}
+              </button>
+              <button
+                onClick={() => {
+                  setEditingReview(true);
+                  setReviewText(shelfBook.review);
+                }}
+                className="edit-review-button"
+              >
+                Edit
+              </button>
               </div>
-            ) : shelfBook?.review ? (
-              <div className="review-text">
-                <p className={showFullReview ? "expanded" : "collapsed"}>
-                  {shelfBook.review}
-                </p>
-                <div className="review-text-actions">
-                <button onClick={() => setShowFullReview(!showFullReview)}>
-                  {showFullReview ? "Show Less" : "Show More"}
-                </button>
-                <button
-                  onClick={() => {
-                    setEditingReview(true);
-                    setReviewText(shelfBook.review);
-                  }}
-                  className="edit-review-button"
-                >
-                  Edit
-                </button>
-                </div>
-              </div>
-            ) : (
-              <div className="review-placeholder">
-                <button
-                  onClick={() => setEditingReview(true)}
-                  className="add-review-button"
-                >
-                  Add Review
-                </button>
-              </div>
-            )}
-          </>
-        )}
-      </div>
+            </div>
+          ) : (
+            <div className="review-placeholder">
+              <button
+                onClick={() => setEditingReview(true)}
+                className="add-review-button"
+              >
+                Add Review
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

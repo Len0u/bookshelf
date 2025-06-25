@@ -32,14 +32,14 @@ export const BookProvider = ({ children }) => {
     setShelf((prev) => {
       if (prev.some((b) => b.id === book.id)) return prev;
       //add finished, with default not finished
-      return [...prev, { 
+      return [{ 
         ...book, 
         status: "tbr", 
         rating: 0, 
         review: "",
         startDate: "",
         endDate: ""
-      }];
+      }, ...prev];
     });
   };
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { searchBooks } from "../services/api";
 import BookCard from "../components/BookCard";
+import SearchBookCard from "../components/SearchBookCard";
 import { useBookContext } from "../contexts/BookContext";
 import ReadingGoal from "../components/ReadingGoal";
 import Shelf from "./Shelf";
@@ -50,10 +51,13 @@ function Home() {
         </button>
       </form>
       {searchQuery && books.length > 0 ? (
-        <div className="book-grid">
-          {books.map((book) => (
-            <BookCard book={book} key={book.id} />
-          ))}
+        <div className="search-results">
+          <h2>Search Results for "{searchQuery}"</h2>
+          <div className="search-book-grid">
+            {books.map((book) => (
+              <SearchBookCard book={book} key={book.id} />
+            ))}
+          </div>
         </div>
       ) : (
         <Shelf />
