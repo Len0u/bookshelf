@@ -1,64 +1,71 @@
 .my-shelf {
-  margin: 2rem;
-  padding: 1rem;
-  background-color: linen;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  font-family: "Optima", sans-serif;
+  margin: var(--spacing-xl);
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
 }
 
 .my-shelf h2 {
   font-size: 1.5rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  color: #444;
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
   text-align: center;
 }
 
-.book-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 0));
-  gap: 1.5rem;
-  margin-top: 2rem;
-  justify-content: center;
-}
-
+/* Filter buttons */
 .view-shelf-button,
 .view-tbr-shelf-button,
 .view-reading-shelf-button,
 .view-finished-shelf-button {
-  margin: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: olivedrab;
-  color: white;
+  margin: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--accent-color);
+  color: var(--text-white);
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background var(--transition-normal);
 }
 
 .view-shelf-button:hover,
 .view-tbr-shelf-button:hover,
 .view-reading-shelf-button:hover,
 .view-finished-shelf-button:hover {
-  background-color: #5A6B33;
+  background-color: var(--primary-color);
 }
 
+/* Active state for filter buttons */
+.view-shelf-button.active,
+.view-tbr-shelf-button.active,
+.view-reading-shelf-button.active,
+.view-finished-shelf-button.active {
+  background-color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Shelf statistics */
 .shelf-counts {
-  margin-top: 2rem;
+  margin-top: var(--spacing-xl);
   text-align: center;
   font-size: 0.95rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .shelf-counts p {
-  margin: 0.3rem 0;
+  margin: var(--spacing-xs) 0;
 }
 
-p {
+/* Empty state */
+.empty-state {
   text-align: center;
-  color: #999;
+  color: var(--text-light);
   font-style: italic;
-  margin-top: 2rem;
+  margin-top: var(--spacing-xl);
+}
+
+.empty-state p {
+  margin: var(--spacing-sm) 0;
 }

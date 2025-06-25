@@ -1,9 +1,191 @@
+/* CSS Custom Properties (Variables) */
+:root {
+  /* Color Palette */
+  --primary-color: #5A6B33;
+  --primary-dark: #3F4C1A;
+  --primary-light: #8DA76E;
+  --secondary-color: #B7C48B;
+  --accent-color: olivedrab;
+  
+  /* Background Colors */
+  --bg-primary: #B7C48B;
+  --bg-secondary: linen;
+  --bg-card: white;
+  --bg-input: #fdfdfd;
+  --bg-review: #fafafa;
+  
+  /* Text Colors */
+  --text-primary: #374151;
+  --text-secondary: #555;
+  --text-muted: #666;
+  --text-light: #999;
+  --text-white: #f0f0f0;
+  
+  /* Status Colors */
+  --status-finished: forestgreen;
+  --status-tbr: goldenrod;
+  --status-reading: cornflowerblue;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+  --radius-full: 50%;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.05);
+  
+  /* Transitions */
+  --transition-fast: 0.1s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+}
+
+/* Global Reset and Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Optima", sans-serif;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+/* Main Layout */
 .main-content {
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #B7C48B;
+  background-color: var(--bg-primary);
   font-family: "Optima", sans-serif;
-  color: #374151;
-  
+  color: var(--text-primary);
 }
+
+/* Common Layout Classes */
+.container {
+  margin: var(--spacing-xl);
+  padding: 0 var(--spacing-md);
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-md);
+}
+
+/* Grid System */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  justify-content: center;
+}
+
+/* Button Styles */
+.btn {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 1rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background-color var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+  font-weight: 500;
+}
+
+.btn:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--accent-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-color);
+}
+
+.btn-small {
+  font-size: 0.85rem;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+}
+
+/* Form Elements */
+.form-input {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-input);
+  box-shadow: var(--shadow-sm);
+  font-family: inherit;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(90, 107, 51, 0.2);
+}
+
+/* Status Dropdown */
+.status-dropdown {
+  font-size: 0.8rem;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  border: 1px solid #ccc;
+  color: var(--text-white);
+  margin-top: var(--spacing-xs);
+}
+
+.status-dropdown.finished {
+  background-color: var(--status-finished);
+}
+
+.status-dropdown.tbr {
+  background-color: var(--status-tbr);
+}
+
+.status-dropdown.reading {
+  background-color: var(--status-reading);
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+.mt-4 { margin-top: var(--spacing-xl); }
+
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+.mb-4 { margin-bottom: var(--spacing-xl); }
+
+.p-1 { padding: var(--spacing-sm); }
+.p-2 { padding: var(--spacing-md); }
+.p-3 { padding: var(--spacing-lg); }
+.p-4 { padding: var(--spacing-xl); }

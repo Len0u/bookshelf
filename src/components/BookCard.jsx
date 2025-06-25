@@ -74,7 +74,7 @@ function BookCard({ book }) {
                 {[1, 2, 3, 4, 5].map((value) => (
                   <FaStar
                     key={value}
-                    onClick={() => handleRatingClick(value)}
+                    onClick={() => handleRatingClick(value === shelfBook?.rating ? 0 : value)}
                     color={
                       value <= (shelfBook?.rating || 0) ? "#ffc107" : "#e4e5e9"
                     }

@@ -17,7 +17,7 @@ function Home() {
     e.preventDefault();
     if (!searchQuery.trim()) return;
     if (loading) return;
-    setLoading(true);
+    setLoading(true); 
     try {
       const searchResults = await searchBooks(searchQuery);
       setBooks(searchResults);

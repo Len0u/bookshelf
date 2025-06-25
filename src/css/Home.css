@@ -1,6 +1,6 @@
 .home {
-  margin: 2rem ;
-  padding: 0 1rem;
+  margin: var(--spacing-xl);
+  padding: 0 var(--spacing-md);
   font-family: "Optima", sans-serif;
 }
 
@@ -9,45 +9,60 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 /* Search input styling */
 .search-input {
   flex: 1;
   max-width: 400px;
-  padding: 0.6rem 1rem;
+  padding: var(--spacing-sm) var(--spacing-md);
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fdfdfd;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-input);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Search button styling */
 .search-button {
-  background-color: #5A6B33;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-white);
   border: none;
-  padding: 0.6rem 1.2rem;
+  padding: var(--spacing-sm) var(--spacing-lg);
   font-size: 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color var(--transition-normal);
+  box-shadow: var(--shadow-sm);
 }
 
 .search-button:hover {
-  background-color: #3F4C1A;
+  background-color: var(--primary-dark);
 }
 
-/* Grid for books when results are shown */
-.book-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 0));
-  gap: 1.5rem;
-  margin-top: 2rem;
-  justify-content: center;
+/* Error and loading states */
+.error-message {
+  color: #dc2626;
+  text-align: center;
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-md);
+  background-color: #fef2f2;
+  border-radius: var(--radius-md);
+  border: 1px solid #fecaca;
+}
+
+.loading-message {
+  text-align: center;
+  margin: var(--spacing-md) 0;
+  color: var(--text-muted);
+}
+
+.no-results {
+  text-align: center;
+  margin: var(--spacing-md) 0;
+  color: var(--text-muted);
+  font-style: italic;
 }
