@@ -1,7 +1,6 @@
 import ReadingGoal from "../components/ReadingGoal"
-
 function Goals () {
-  return <ReadingGoal/>
+  return <ReadingGoal />
 }
 
 export default Goals

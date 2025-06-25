@@ -18,7 +18,7 @@ function BookCard({ book }) {
   const shelfBook = shelf.find((b) => b.id === book.id);
   const [editingReview, setEditingReview] = useState(false);
   const [reviewText, setReviewText] = useState(shelfBook?.review || "");
-  const [showFullReview, setShowFullReview] = useState(false)
+  const [showFullReview, setShowFullReview] = useState(false);
 
   const handleSave = () => {
     updateReview(book.id, reviewText);
@@ -47,7 +47,7 @@ function BookCard({ book }) {
             onClick={onShelfClick}
             title={shelved ? "Remove from shelf" : "Add to shelf"}
           >
-            {shelved ? "-" : "+"}
+            {shelved ? "X" : "+"}
           </button>
         </div>
       </div>
@@ -98,19 +98,13 @@ function BookCard({ book }) {
               </div>
             ) : shelfBook?.review ? (
               <div className="review-text">
-                <p className="review-preview">
-                  {showFullReview || shelfBook.review.length < 120
-                    ? shelfBook.review
-                    : shelfBook.review.slice(0, 120) + "..."}
+                <p className={showFullReview ? "expanded" : "collapsed"}>
+                  {shelfBook.review}
                 </p>
-                {(shelfBook.review.length > 120 || showFullReview) && (
-                  <button
-                    className="toggle-review-expand"
-                    onClick={() => setShowFullReview(!showFullReview)}
-                  >
-                    {showFullReview ? "Show Less" : "Show More"}
-                  </button>
-                )}
+                <div className="review-text-actions">
+                <button onClick={() => setShowFullReview(!showFullReview)}>
+                  {showFullReview ? "Show Less" : "Show More"}
+                </button>
                 <button
                   onClick={() => {
                     setEditingReview(true);
@@ -120,6 +114,7 @@ function BookCard({ book }) {
                 >
                   Edit
                 </button>
+                </div>
               </div>
             ) : (
               <div className="review-placeholder">

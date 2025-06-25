@@ -65,6 +65,8 @@ function Shelf() {
           ? "All Books"
           : viewingShelf === "finished"
           ? "Finished Books"
+          : viewingShelf === "reading"
+          ? "Currently Reading"
           : "To Be Read"}
       </h2>
       <div className="book-grid">

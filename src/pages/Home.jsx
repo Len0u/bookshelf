@@ -4,13 +4,12 @@ import BookCard from "../components/BookCard";
 import { useBookContext } from "../contexts/BookContext";
 import ReadingGoal from "../components/ReadingGoal";
 import Shelf from "./Shelf";
+import "../css/Home.css"
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [books, setBooks] = useState([]);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false); //jsut because i don'e have a main paige to yeet this to false
-  const [viewingShelf, setViewingShelf] = useState("home");
 
   const { shelf } = useBookContext();
 
@@ -22,8 +21,6 @@ function Home() {
     try {
       const searchResults = await searchBooks(searchQuery);
       setBooks(searchResults);
-      setError(null);
-      setViewingShelf("");
     } catch (err) {
       console.log(err);
       setError("Failed to search books");
@@ -31,29 +28,15 @@ function Home() {
       setLoading(false);
     }
   };
-  const applyShelfFilter = (filter) => {
-    setSearchQuery("");
-    setError(null);
-    switch (filter) {
-      case "finished":
-        return shelf.filter((book) => book.finished);
-      case "tbr":
-        return shelf.filter((book) => book.tbr);
-      default:
-        return shelf;
-    }
-  };
 
   useEffect(() => {
-    if (viewingShelf) {
-      setBooks(applyShelfFilter(viewingShelf));
+    if (searchQuery.trim() === "") {
+      setBooks([]);  // Clear old results if search input is empty
     }
-  }, [shelf, viewingShelf]);
-
+  }, [searchQuery]);
 
   return (
     <div className="home">
-      <ReadingGoal />
       <form onSubmit={handleSearch} className="search-form">
         <input
           type="text"

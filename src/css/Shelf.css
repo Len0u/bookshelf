@@ -1,7 +1,7 @@
 .my-shelf {
   margin: 2rem;
   padding: 1rem;
-  background-color: #fefcf9;
+  background-color: linen;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   font-family: "Optima", sans-serif;
@@ -17,7 +17,7 @@
 
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 0));
   gap: 1.5rem;
   margin-top: 2rem;
   justify-content: center;
@@ -29,8 +29,8 @@
 .view-finished-shelf-button {
   margin: 0.5rem;
   padding: 0.5rem 1rem;
-  background-color: #f5c518;
-  color: #333;
+  background-color: olivedrab;
+  color: white;
   border: none;
   border-radius: 5px;
   font-weight: 500;
@@ -42,7 +42,7 @@
 .view-tbr-shelf-button:hover,
 .view-reading-shelf-button:hover,
 .view-finished-shelf-button:hover {
-  background-color: #e0af00;
+  background-color: #5A6B33;
 }
 
 .shelf-counts {

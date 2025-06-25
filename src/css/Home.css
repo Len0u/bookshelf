@@ -1,0 +1,53 @@
+.home {
+  margin: 2rem ;
+  padding: 0 1rem;
+  font-family: "Optima", sans-serif;
+}
+
+/* Search form container */
+.search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Search input styling */
+.search-input {
+  flex: 1;
+  max-width: 400px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Search button styling */
+.search-button {
+  background-color: #5A6B33;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-button:hover {
+  background-color: #3F4C1A;
+}
+
+/* Grid for books when results are shown */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 0));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
