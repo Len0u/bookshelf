@@ -68,29 +68,26 @@ function BookCard({ book }) {
             </button>
           </div>
         </div>
-        
+
         <div className="book-basic-info">
           <h3>{info.title}</h3>
           <p className="authors">{info.authors}</p>
           {shelved && (
             <div className="status-section">
-              <label>
-                Status:{" "}
-                <select
-                  className={`status-dropdown ${shelfBook?.status || "tbr"}`}
-                  value={shelfBook?.status || "tbr"}
-                  onChange={(e) => updateStatus(book.id, e.target.value)}
-                >
-                  <option value="tbr">To Be Read</option>
-                  <option value="reading">Reading</option>
-                  <option value="finished">Finished</option>
-                </select>
-              </label>
+              <select
+                className={`status-dropdown ${shelfBook?.status || "tbr"}`}
+                value={shelfBook?.status || "tbr"}
+                onChange={(e) => updateStatus(book.id, e.target.value)}
+              >
+                <option value="tbr">To Be Read</option>
+                <option value="reading">Reading</option>
+                <option value="finished">Finished</option>
+              </select>
             </div>
           )}
         </div>
       </div>
-      
+
       {shelved && (
         <div className="book-details">
           {/* Date inputs */}
@@ -104,7 +101,7 @@ function BookCard({ book }) {
                 className="date-input"
               />
             </label>
-            
+
             <label className="date-label">
               End Date:
               <input
@@ -116,15 +113,6 @@ function BookCard({ book }) {
             </label>
           </div>
 
-          {/* Display reading duration if both dates are set */}
-          {shelfBook?.startDate && shelfBook?.endDate && (
-            <div className="reading-duration">
-              <span className="duration-text">
-                Reading time: {formatDate(shelfBook.startDate)} - {formatDate(shelfBook.endDate)}
-              </span>
-            </div>
-          )}
-
           <div className="rating-section">
             <label className="rating-label">
               Rating:
@@ -132,7 +120,9 @@ function BookCard({ book }) {
                 {[1, 2, 3, 4, 5].map((value) => (
                   <FaStar
                     key={value}
-                    onClick={() => handleRatingClick(value === shelfBook?.rating ? 0 : value)}
+                    onClick={() =>
+                      handleRatingClick(value === shelfBook?.rating ? 0 : value)
+                    }
                     color={
                       value <= (shelfBook?.rating || 0) ? "#ffc107" : "#e4e5e9"
                     }
@@ -161,18 +151,18 @@ function BookCard({ book }) {
                 {shelfBook.review}
               </p>
               <div className="review-text-actions">
-              <button onClick={() => setShowFullReview(!showFullReview)}>
-                {showFullReview ? "Show Less" : "Show More"}
-              </button>
-              <button
-                onClick={() => {
-                  setEditingReview(true);
-                  setReviewText(shelfBook.review);
-                }}
-                className="edit-review-button"
-              >
-                Edit
-              </button>
+                <button onClick={() => setShowFullReview(!showFullReview)}>
+                  {showFullReview ? "Show Less" : "Show More"}
+                </button>
+                <button
+                  onClick={() => {
+                    setEditingReview(true);
+                    setReviewText(shelfBook.review);
+                  }}
+                  className="edit-review-button"
+                >
+                  Edit
+                </button>
               </div>
             </div>
           ) : (

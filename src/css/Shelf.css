@@ -1,9 +1,10 @@
 .my-shelf {
-  margin: var(--spacing-xl);
   padding: var(--spacing-md);
   background-color: var(--bg-secondary);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
+  width: 100%;
+  margin:auto
 }
 
 .my-shelf h2 {
@@ -12,6 +13,52 @@
   margin-bottom: var(--spacing-md);
   color: var(--text-primary);
   text-align: center;
+}
+
+/* Shelf Controls Layout */
+.shelf-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.filter-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.sort-controls label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.sort-dropdown {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid #ccc;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-input);
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color var(--transition-normal);
+}
+
+.sort-dropdown:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px rgba(90, 107, 51, 0.2);
 }
 
 /* Book Grid Layout - Override App.css grid layout */
@@ -87,6 +134,20 @@
   .my-shelf {
     margin: var(--spacing-md);
     padding: var(--spacing-sm);
+  }
+  
+  .shelf-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+  
+  .filter-buttons {
+    justify-content: center;
+  }
+  
+  .sort-controls {
+    justify-content: center;
   }
   
   .my-shelf .book-grid {

@@ -6,12 +6,13 @@ import "../css/Shelf.css"
 function Shelf() {
   const [books, setBooks] = useState([]);
   const [viewingShelf, setViewingShelf] = useState("all");
+  const [sortBy, setSortBy] = useState("dateAdded");
 
   const { shelf } = useBookContext();
 
   useEffect(() => {
     if (viewingShelf) {
-      const filtered =
+      let filtered =
         viewingShelf === "finished"
           ? shelf.filter((b) => b.status === "finished")
           : viewingShelf === "tbr"
@@ -19,9 +20,43 @@ function Shelf() {
           : viewingShelf === "reading"
           ? shelf.filter((b) => b.status === "reading")
           : shelf;
+      
+      // Sort the filtered books
+      filtered = sortBooks(filtered, sortBy);
       setBooks(filtered);
     }
-  }, [shelf, viewingShelf]);
+  }, [shelf, viewingShelf, sortBy]);
+
+  const sortBooks = (bookList, sortOption) => {
+    const sortedBooks = [...bookList];
+    
+    switch (sortOption) {
+      case "dateAdded":
+        // Books are already in date added order from the context
+        return sortedBooks;
+      case "author":
+        return sortedBooks.sort((a, b) => {
+          const authorA = a.volumeInfo.authors?.[0] || "";
+          const authorB = b.volumeInfo.authors?.[0] || "";
+          return authorA.localeCompare(authorB);
+        });
+      case "rating":
+        return sortedBooks.sort((a, b) => {
+          const ratingA = a.rating || 0;
+          const ratingB = b.rating || 0;
+          return ratingB - ratingA; // Highest rating first
+        });
+      case "status":
+        const statusOrder = { "reading": 1, "tbr": 2, "finished": 3 };
+        return sortedBooks.sort((a, b) => {
+          const statusA = statusOrder[a.status] || 0;
+          const statusB = statusOrder[b.status] || 0;
+          return statusA - statusB;
+        });
+      default:
+        return sortedBooks;
+    }
+  };
 
   const total = shelf.length;
   const tbrCount = shelf.filter((b) => b.status === "tbr").length;
@@ -30,36 +65,56 @@ function Shelf() {
 
   return (
     <div className="my-shelf">
-      <button
-        type="button"
-        className="view-shelf-button"
-        onClick={() => setViewingShelf("all")}
-      >
-        My Shelf
-      </button>
+      <div className="shelf-controls">
+        <div className="filter-buttons">
+          <button
+            type="button"
+            className="view-shelf-button"
+            onClick={() => setViewingShelf("all")}
+          >
+            My Shelf
+          </button>
 
-      <button
-        type="button"
-        className="view-tbr-shelf-button"
-        onClick={() => setViewingShelf("tbr")}
-      >
-        TBR
-      </button>
+          <button
+            type="button"
+            className="view-tbr-shelf-button"
+            onClick={() => setViewingShelf("tbr")}
+          >
+            TBR
+          </button>
 
-      <button
-        type="button"
-        className="view-reading-shelf-button"
-        onClick={() => setViewingShelf("reading")}
-      >
-        Reading Books
-      </button>
-      <button
-        type="button"
-        className="view-finished-shelf-button"
-        onClick={() => setViewingShelf("finished")}
-      >
-        Finished Books
-      </button>
+          <button
+            type="button"
+            className="view-reading-shelf-button"
+            onClick={() => setViewingShelf("reading")}
+          >
+            Reading Books
+          </button>
+          <button
+            type="button"
+            className="view-finished-shelf-button"
+            onClick={() => setViewingShelf("finished")}
+          >
+            Finished Books
+          </button>
+        </div>
+
+        <div className="sort-controls">
+          <label htmlFor="sort-select">Sort by:</label>
+          <select
+            id="sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="sort-dropdown"
+          >
+            <option value="dateAdded">Date Added</option>
+            <option value="author">Author</option>
+            <option value="rating">Rating</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+      </div>
+
       <h2>
         {viewingShelf === "all"
           ? "All Books"
