@@ -3,14 +3,17 @@ import { searchBooks } from "../services/api";
 import BookCard from "../components/BookCard";
 import SearchBookCard from "../components/SearchBookCard";
 import { useBookContext } from "../contexts/BookContext";
-import ReadingGoal from "../components/ReadingGoal";
-import Shelf from "./Shelf";
+import WelcomeMessage from "../components/WelcomeMessage";
+import ProgressBar from "../components/ProgressBar";
+import CurrentReads from "../components/CurrentReads";
+import TbrSuggestions from "../components/TbrSuggestions";
 import "../css/Home.css"
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(false); //jsut because i don'e have a main paige to yeet this to false
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const { shelf } = useBookContext();
 
@@ -18,7 +21,8 @@ function Home() {
     e.preventDefault();
     if (!searchQuery.trim()) return;
     if (loading) return;
-    setLoading(true); 
+    setLoading(true);
+    setError("");
     try {
       const searchResults = await searchBooks(searchQuery);
       setBooks(searchResults);
@@ -32,7 +36,8 @@ function Home() {
 
   useEffect(() => {
     if (searchQuery.trim() === "") {
-      setBooks([]);  // Clear old results if search input is empty
+      setBooks([]);
+      setError("");
     }
   }, [searchQuery]);
 
@@ -46,10 +51,11 @@ function Home() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button type="submit" className="search-button">
-          Search
+        <button type="submit" className="search-button" disabled={loading}>
+          {loading ? "Searching..." : "Search"}
         </button>
       </form>
+
       {searchQuery && books.length > 0 ? (
         <div className="search-results">
           <h2>Search Results for "{searchQuery}"</h2>
@@ -59,8 +65,25 @@ function Home() {
             ))}
           </div>
         </div>
+      ) : searchQuery && error ? (
+        <div className="error-message">
+          <p>{error}</p>
+        </div>
+      ) : searchQuery && loading ? (
+        <div className="loading-message">
+          <p>Searching for books...</p>
+        </div>
+      ) : searchQuery && books.length === 0 ? (
+        <div className="no-results">
+          <p>No books found for "{searchQuery}"</p>
+        </div>
       ) : (
-        <Shelf />
+        <div className="home-dashboard">
+          <WelcomeMessage />
+          <ProgressBar />
+          <CurrentReads />
+          <TbrSuggestions />
+        </div>
       )}
     </div>
   );

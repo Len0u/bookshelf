@@ -39,8 +39,19 @@
   box-shadow: var(--shadow-sm);
 }
 
-.search-button:hover {
+.search-button:hover:not(:disabled) {
   background-color: var(--primary-dark);
+}
+
+.search-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Home Dashboard */
+.home-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Search results styling */
@@ -88,6 +99,11 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
+  .home {
+    margin: var(--spacing-md);
+    padding: 0 var(--spacing-sm);
+  }
+  
   .search-book-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--spacing-md);

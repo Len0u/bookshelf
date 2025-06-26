@@ -2,14 +2,12 @@ import { useBookContext } from "../contexts/BookContext";
 import GenrePieChart from "./GenrePieChart";
 import RatingsPieChart from "./RatingsPieChart";
 import ReadingTimeline from "./ReadingTimeline";
+import ProgressBar from "./ProgressBar";
 import "../css/ReadingGoals.css";
 
 function ReadingGoal() {
   const { shelf, readingGoal, setReadingGoal, finishedCount } =
     useBookContext();
-
-  const progress =
-    readingGoal === 0 ? 0 : Math.min(100, (finishedCount / readingGoal) * 100);
 
   const handleChange = (e) => {
     setReadingGoal(Number(e.target.value));
@@ -47,14 +45,8 @@ function ReadingGoal() {
             min="0"
           />
         </label>
-        <p>
-          {finishedCount} of {readingGoal} books finished
-        </p>
         
-        <div className="progress-bar">
-          <div className="progress-bar-fill" style={{ width: `${progress}%` }} />
-        </div>
-        <p className="progress-label">{progress.toFixed(0)}% completed</p>
+        <ProgressBar />
 
         <div className="pie-charts">
           <div className="rating-pie-chart">
