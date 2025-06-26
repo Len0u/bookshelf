@@ -39,6 +39,7 @@ function RatingsPieChart() {
           cy="50%"
           outerRadius={100}
           label
+          isAnimationActive={false}
         >
           {data.map((_, i) => (
             <Cell key={i} fill={COLORS[i % COLORS.length]} />

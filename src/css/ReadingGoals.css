@@ -19,6 +19,104 @@
   text-align: center;
 }
 
+/* Goal Section Styles */
+.goal-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.goal-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: var(--spacing-sm);
+  color: var(--primary-dark);
+}
+
+.goal-description {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.goal-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  align-items: center;
+}
+
+.goal-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.goal-label {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.goal-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--primary-color);
+  overflow: hidden;
+}
+
+.goal-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background var(--transition-normal);
+  min-width: 50px;
+}
+
+.goal-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.goal-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.goal-input {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+  outline: none;
+  min-width: 120px;
+  font-family: inherit;
+}
+
+.goal-input:focus {
+  border: none;
+  background: red;
+}
+
+.goal-input::-webkit-inner-spin-button,
+.goal-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.goal-input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .reading-stats label {
   display: block;
   font-weight: 500;
@@ -32,7 +130,7 @@
   font-family: 'Optima', sans-serif;
   color: var(--primary-dark);
   font-size: 1rem;
-  border: 2px solid var(--primary-dark);
+  border: none;
   border-radius: var(--radius-lg);
   background: #fbfbf4;
   transition: border-color var(--transition-slow);
@@ -40,6 +138,7 @@
 
 .reading-stats input[type="number"]:focus {
   outline: none;
+  border: none;
   border-color: var(--primary-color);
 }
 
@@ -112,5 +211,21 @@
 @media (max-width: 768px) {
   .reading-goals-container {
     gap: var(--spacing-md);
+  }
+  
+  .goal-input-wrapper {
+    flex-direction: column;
+    border-radius: var(--radius-md);
+  }
+  
+  .goal-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1rem;
+  }
+  
+  .goal-input {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1rem;
+    min-width: 100px;
   }
 }

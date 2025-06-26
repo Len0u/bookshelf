@@ -20,7 +20,7 @@ function TbrSuggestions() {
   }
 
   // Show up to 3 TBR books as suggestions
-  const suggestedBooks = tbrBooks.slice(0, 3);
+  const suggestedBooks = tbrBooks.slice(0, 2);
 
   return (
     <div className="tbr-suggestions-section">

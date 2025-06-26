@@ -326,12 +326,13 @@
   }
   
   .date-inputs {
-    flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
+    align-items: flex-start;
   }
   
   .date-label {
     min-width: auto;
+    align-items: flex-start;
   }
   
   .rating-section {
@@ -362,5 +363,14 @@
   
   .book-basic-info .authors {
     font-size: 0.75rem;
+  }
+  
+  .date-inputs {
+    gap: var(--spacing-md);
+    align-items: flex-start;
+  }
+  
+  .date-label {
+    align-items: flex-start;
   }
 }

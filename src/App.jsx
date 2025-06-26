@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Home from "./pages/Home";
 import Shelf from "./pages/Shelf";
-import Goals from "./pages/Goals";
+import ReadingStats from "./pages/ReadingStats";
 import BookCard from "./components/BookCard";
 import { BookProvider } from "./contexts/BookContext";
 import { Routes, Route } from "react-router-dom";
@@ -17,7 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shelf" element={<Shelf />} />
-          <Route path="/goals" element={<Goals />} />
+          <Route path="/goals" element={<ReadingStats />} />
         </Routes>
       </main>
     </BookProvider>
