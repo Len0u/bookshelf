@@ -1,6 +1,5 @@
 import { useBookContext } from "../contexts/BookContext";
 import BookCard from "./BookCard";
-import "../css/CurrentReads.css";
 
 function CurrentReads() {
   const { shelf } = useBookContext();

@@ -1,6 +1,5 @@
 import { useBookContext } from "../contexts/BookContext";
 import BookCard from "./BookCard";
-import "../css/TbrSuggestions.css";
 
 function TbrSuggestions() {
   const { shelf } = useBookContext();
@@ -20,7 +19,7 @@ function TbrSuggestions() {
   }
 
   // Show up to 3 TBR books as suggestions
-  const suggestedBooks = tbrBooks.slice(0, 2);
+  const suggestedBooks = tbrBooks.slice(0, 3);
 
   return (
     <div className="tbr-suggestions-section">

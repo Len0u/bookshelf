@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "../css/WelcomeMessage.css";
 
 function WelcomeMessage() {
   const [greeting, setGreeting] = useState("");
