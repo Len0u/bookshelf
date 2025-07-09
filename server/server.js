@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const connectDb = require("./config/dbConnection")
+const userRoutes = require("./routes/userRoutes");
+const bookRoutes = require("./routes/bookRoutes")
 
 connectDb();
 
@@ -12,9 +14,10 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json()); // Parses incoming JSON
 
-const userRoutes = require("./routes/userRoutes");
+
 
 app.use("/api/users", userRoutes);
+app.use("/api/books", bookRoutes);
 
 
 app.listen(port, () => {

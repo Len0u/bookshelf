@@ -108,7 +108,11 @@ const loginUser = asyncHandler(async (req, res) => {
  */
 const currentUser = asyncHandler(async (req, res) => {
   // User information is available in req.user from JWT token
-  res.json({ message: "current user info" });
+  res.status(200).json({
+    id: req.user._id,
+    name: req.user.name,
+    email: req.user.email
+  });
 });
 
 module.exports = { registerUser, loginUser, currentUser };
