@@ -7,7 +7,10 @@ import BookCard from "./components/BookCard";
 import { BookProvider } from "./contexts/BookContext";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
-import "./css/App.css"
+import "./css/App.css";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
 
 function App() {
   return (
@@ -18,6 +21,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/shelf" element={<Shelf />} />
           <Route path="/goals" element={<ReadingStats />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
         </Routes>
       </main>
     </BookProvider>
