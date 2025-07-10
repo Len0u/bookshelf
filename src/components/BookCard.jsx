@@ -15,34 +15,33 @@ function BookCard({ book }) {
     updateStartDate,
     updateEndDate,
   } = useBookContext();
-  const shelved = onShelf(book.id);
-  const info = book.volumeInfo || book; // fallback to book itself if no volumeInfo
-  const shelfBook = shelf.find((b) => b.id === book.id);
+  const shelved = onShelf(book.googleBookId);
+  const shelfBook = shelf.find((b) => b.googleBookId === book.googleBookId);
   const [editingReview, setEditingReview] = useState(false);
   const [reviewText, setReviewText] = useState(shelfBook?.review || "");
   const [showFullReview, setShowFullReview] = useState(false);
 
   const handleSave = () => {
-    updateReview(book.id, reviewText);
+    updateReview(book.googleBookId, reviewText);
     setEditingReview(false);
   };
 
   const onShelfClick = (e) => {
     e.preventDefault();
-    if (shelved) removeFromShelf(book.id);
+    if (shelved) removeFromShelf(book.googleBookId);
     else addToShelf(book);
   };
 
   const handleRatingClick = (value) => {
-    updateRating(book.id, value);
+    updateRating(book.googleBookId, value);
   };
 
   const handleStartDateChange = (e) => {
-    updateStartDate(book.id, e.target.value);
+    updateStartDate(book.googleBookId, e.target.value);
   };
 
   const handleEndDateChange = (e) => {
-    updateEndDate(book.id, e.target.value);
+    updateEndDate(book.googleBookId, e.target.value);
   };
 
   const formatDate = (dateString) => {
@@ -55,8 +54,8 @@ function BookCard({ book }) {
     <div className="book-card">
       <div className="book-left-section">
         <div className="book-thumbnail">
-          {info && info.imageLinks && info.imageLinks.thumbnail && (
-            <img src={info.imageLinks.thumbnail} alt={info.title || "No title"} />
+          {book.image && (
+            <img src={book.image} alt={book.title || "No title"} />
           )}
           <div className="book-overlay">
             <button
@@ -70,14 +69,14 @@ function BookCard({ book }) {
         </div>
 
         <div className="book-basic-info">
-          <h3>{info.title}</h3>
-          <p className="authors">{info.authors}</p>
+          <h3>{book.title}</h3>
+          <p className="authors">{book.author}</p>
           {shelved && (
             <div className="status-section">
               <select
                 className={`status-dropdown ${shelfBook?.status || "tbr"}`}
                 value={shelfBook?.status || "tbr"}
-                onChange={(e) => updateStatus(book.id, e.target.value)}
+                onChange={(e) => updateStatus(book.googleBookId, e.target.value)}
               >
                 <option value="tbr">To Be Read</option>
                 <option value="reading">Reading</option>

@@ -72,7 +72,7 @@ export const BookProvider = ({ children }) => {
   const updateStatus = (bookId, newStatus) => {
     setShelf((prev) =>
       prev.map((book) =>
-        book._id === bookId ? { ...book, status: newStatus } : book
+        book.googleBookId === bookId ? { ...book, status: newStatus } : book
       )
     );
   };
@@ -80,7 +80,7 @@ export const BookProvider = ({ children }) => {
   const updateRating = (bookId, newRating) => {
     setShelf((prev) =>
       prev.map((book) =>
-        book._id === bookId ? { ...book, rating: Number(newRating) } : book
+        book.googleBookId === bookId ? { ...book, rating: Number(newRating) } : book
       )
     );
   };
@@ -88,7 +88,7 @@ export const BookProvider = ({ children }) => {
   const updateReview = (bookId, newReview) => {
     setShelf((prev) =>
       prev.map((book) =>
-        book._id === bookId ? { ...book, review: newReview } : book
+        book.googleBookId === bookId ? { ...book, review: newReview } : book
       )
     );
   };
@@ -96,7 +96,7 @@ export const BookProvider = ({ children }) => {
   const updateStartDate = (bookId, newStartDate) => {
     setShelf((prev) =>
       prev.map((book) =>
-        book._id === bookId ? { ...book, startDate: newStartDate } : book
+        book.googleBookId === bookId ? { ...book, startDate: newStartDate } : book
       )
     );
   };
@@ -104,7 +104,7 @@ export const BookProvider = ({ children }) => {
   const updateEndDate = (bookId, newEndDate) => {
     setShelf((prev) =>
       prev.map((book) =>
-        book._id === bookId ? { ...book, endDate: newEndDate } : book
+        book.googleBookId === bookId ? { ...book, endDate: newEndDate } : book
       )
     );
   };
