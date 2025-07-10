@@ -16,7 +16,7 @@ function BookCard({ book }) {
     updateEndDate,
   } = useBookContext();
   const shelved = onShelf(book.id);
-  const info = book.volumeInfo;
+  const info = book.volumeInfo || book; // fallback to book itself if no volumeInfo
   const shelfBook = shelf.find((b) => b.id === book.id);
   const [editingReview, setEditingReview] = useState(false);
   const [reviewText, setReviewText] = useState(shelfBook?.review || "");
@@ -55,8 +55,8 @@ function BookCard({ book }) {
     <div className="book-card">
       <div className="book-left-section">
         <div className="book-thumbnail">
-          {info.imageLinks?.thumbnail && (
-            <img src={info.imageLinks.thumbnail} alt={info.title} />
+          {info && info.imageLinks && info.imageLinks.thumbnail && (
+            <img src={info.imageLinks.thumbnail} alt={info.title || "No title"} />
           )}
           <div className="book-overlay">
             <button

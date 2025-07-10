@@ -7,6 +7,7 @@
  */
 
 const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
 const Book = require("../models/bookModel");
 
 /**
@@ -20,7 +21,8 @@ const Book = require("../models/bookModel");
  */
 const getBooks = asyncHandler(async (req, res) => {
   // Find all books where user_id matches the authenticated user's ID
-  const books = await Book.find({ user_id: req.user.id });
+  // For now, get all books since authentication is disabled
+  const books = await Book.find({});
   res.status(200).json(books);
 });
 
@@ -35,7 +37,7 @@ const getBooks = asyncHandler(async (req, res) => {
  */
 const createBook = asyncHandler(async (req, res) => {
   console.log("the req body: ", req.body);
-  const { title, author, genre, status, startDate, endDate, rating, review } =
+  const { title, author, genre, image, googleBookId, status, startDate, endDate, rating, review } =
     req.body;
 
   // Validate that all required fields are provided
@@ -45,11 +47,14 @@ const createBook = asyncHandler(async (req, res) => {
   }
 
   // Create new contact and associate it with the authenticated user
+  // For now, use a default user_id since authentication is disabled
   const book = await Book.create({
-    user_id: req.user.id,
+    user_id: new mongoose.Types.ObjectId(), // Create a temporary user_id
     title,
     author,
     genre,
+    image,
+    googleBookId,
     status,
     startDate,
     endDate,
@@ -79,12 +84,13 @@ const updateBook = asyncHandler(async (req, res) => {
   }
 
   // Ensure user can only update their own books
-  if (book.user_id.toString() !== req.user.id) {
-    res.status(403);
-    throw new Error(
-      "User doesn't have permission to update other user books"
-    );
-  }
+  // For now, skip this check since authentication is disabled
+  // if (book.user_id.toString() !== req.user.id) {
+  //   res.status(403);
+  //   throw new Error(
+  //     "User doesn't have permission to update other user books"
+  //   );
+  // }
 
   // Update the book with new data
   const updatedBook = await Book.findByIdAndUpdate(
@@ -114,12 +120,13 @@ const deleteBook = asyncHandler(async (req, res) => {
   }
 
   // Ensure user can only delete their own books
-  if (book.user_id.toString() !== req.user.id) {
-    res.status(403);
-    throw new Error(
-      "User doesn't have permission to delete other user books"
-    );
-  }
+  // For now, skip this check since authentication is disabled
+  // if (book.user_id.toString() !== req.user.id) {
+  //   res.status(403);
+  //   throw new Error(
+  //     "User doesn't have permission to delete other user books"
+  //   );
+  // }
 
   // Delete the book
   await Book.deleteOne({ _id: req.params.id });

@@ -5,56 +5,74 @@ const BookContext = createContext();
 export const useBookContext = () => useContext(BookContext);
 
 export const BookProvider = ({ children }) => {
-  const [shelf, setShelf] = useState(() => {
-    const saved = localStorage.getItem("shelf");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [shelf, setShelf] = useState([]);
+  const [readingGoal, setReadingGoal] = useState(0);
 
-  const [readingGoal, setReadingGoal] = useState(() => {
-    const saved = localStorage.getItem("readingGoal");
-    return saved ? JSON.parse(saved) : 0;
-  });
-
-  //everytime the shelf is updated, turns shelf info to a json
+  //get shelf with authentication
   useEffect(() => {
-    localStorage.setItem("shelf", JSON.stringify(shelf));
-  }, [shelf]);
+    const fetchBooks = async () => {
+      try {
+        const res = await fetch("http://localhost:5001/api/books", {
+          headers: {
+            //Authorization: `Bearer ${token}`, // if using auth
+          },
+        });
+        const data = await res.json();
+        setShelf(data);
+      } catch (err) {
+        console.error("Failed to fetch books:", err);
+      }
+    };
 
-  useEffect(() => {
-    localStorage.setItem("readingGoal", JSON.stringify(readingGoal));
-  }, [readingGoal]);
+    fetchBooks();
+  }, []);
 
   const finishedCount = shelf.filter(
     (book) => book.status === "finished"
   ).length;
 
-  const addToShelf = (book) => {
-    setShelf((prev) => {
-      if (prev.some((b) => b.id === book.id)) return prev;
-      //add finished, with default not finished
-      return [{ 
-        ...book, 
-        status: "tbr", 
-        rating: 0, 
-        review: "",
-        startDate: "",
-        endDate: ""
-      }, ...prev];
-    });
+  const addToShelf = async (googleBook) => {
+    const info = googleBook.volumeInfo;
+    const normalizedBook = {
+      title: info.title || "Untitled",
+      author: info.authors?.[0] || "Unknown",
+      genre: info.categories?.[0] || "",
+      image: info.imageLinks?.thumbnail || "",
+      googleBookId: googleBook.id,
+      status: "tbr",
+      rating: 0,
+      review: "",
+      startDate: null,
+      endDate: null,
+    };
+
+    try {
+      const res = await fetch("http://localhost:5001/api/books", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }, // add auth bearer
+        body: JSON.stringify(normalizedBook),
+      });
+
+      const newBook = await res.json();
+
+      setShelf((prev) => [newBook, ...prev]);
+    } catch (err) {
+      console.error("Error adding book:", err);
+    }
   };
 
   const removeFromShelf = (bookId) => {
-    setShelf((prev) => prev.filter((book) => book.id !== bookId));
+    setShelf((prev) => prev.filter((book) => book.googleBookId !== bookId));
   };
 
   const onShelf = (bookId) => {
-    return shelf.some((book) => book?.id === bookId);
+    return shelf.some((book) => book?.googleBookId === bookId);
   };
 
   const updateStatus = (bookId, newStatus) => {
     setShelf((prev) =>
       prev.map((book) =>
-        book.id === bookId ? { ...book, status: newStatus } : book
+        book._id === bookId ? { ...book, status: newStatus } : book
       )
     );
   };
@@ -62,7 +80,7 @@ export const BookProvider = ({ children }) => {
   const updateRating = (bookId, newRating) => {
     setShelf((prev) =>
       prev.map((book) =>
-        book.id === bookId ? { ...book, rating: Number(newRating) } : book
+        book._id === bookId ? { ...book, rating: Number(newRating) } : book
       )
     );
   };
@@ -70,7 +88,7 @@ export const BookProvider = ({ children }) => {
   const updateReview = (bookId, newReview) => {
     setShelf((prev) =>
       prev.map((book) =>
-        book.id === bookId ? { ...book, review: newReview } : book
+        book._id === bookId ? { ...book, review: newReview } : book
       )
     );
   };
@@ -78,7 +96,7 @@ export const BookProvider = ({ children }) => {
   const updateStartDate = (bookId, newStartDate) => {
     setShelf((prev) =>
       prev.map((book) =>
-        book.id === bookId ? { ...book, startDate: newStartDate } : book
+        book._id === bookId ? { ...book, startDate: newStartDate } : book
       )
     );
   };
@@ -86,7 +104,7 @@ export const BookProvider = ({ children }) => {
   const updateEndDate = (bookId, newEndDate) => {
     setShelf((prev) =>
       prev.map((book) =>
-        book.id === bookId ? { ...book, endDate: newEndDate } : book
+        book._id === bookId ? { ...book, endDate: newEndDate } : book
       )
     );
   };
@@ -103,7 +121,7 @@ export const BookProvider = ({ children }) => {
     updateRating,
     updateReview,
     updateStartDate,
-    updateEndDate
+    updateEndDate,
   };
   return <BookContext.Provider value={value}>{children}</BookContext.Provider>;
 };

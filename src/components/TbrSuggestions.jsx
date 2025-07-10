@@ -28,7 +28,7 @@ function TbrSuggestions() {
       
       <div className="tbr-suggestions-grid">
         {suggestedBooks.map((book) => (
-          <BookCard book={book} key={book.id} />
+          <BookCard book={book} key={book.googleBookId || book._id || book.id} />
         ))}
       </div>
       

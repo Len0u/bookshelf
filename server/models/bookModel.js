@@ -1,9 +1,9 @@
 /**
  * Book Model
- * 
+ *
  * This module defines the Book schema for MongoDB using Mongoose.
  * Each book belongs to a specific user and contains basic book information
- * including title, author, genre, status, start and end date, rating, and review. 
+ * including title, author, genre, status, start and end date, rating, and review.
  * The model includes automatic timestamp tracking for created and updated dates.
  */
 
@@ -11,65 +11,80 @@ const mongoose = require("mongoose");
 
 /**
  * Book Schema Definition
- * 
+ *
  * Defines the structure and validation rules for book documents in the database.
  * Each book is associated with a user through the user_id field.
  */
-const bookSchema = mongoose.Schema({
-  // Reference to the user who owns this book
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User"
-  },
+const bookSchema = mongoose.Schema(
+  {
+    // Reference to the user who owns this book
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
 
-  // Book title (required)
-  title: {
-    type: String,
-    required: [true, "Please enter book title"]
-  },
+    // Book title (required)
+    title: {
+      type: String,
+      required: [true, "Please enter book title"],
+    },
 
-  // Book author
-  author: {
-    type: String,
-    default: ""
-  },
+    // Book author
+    author: {
+      type: String,
+      default: "",
+    },
 
-  // Genre (optional)
-  genre: {
-    type: String,
-    default: ""
-  },
+    // Genre (optional)
+    genre: {
+      type: String,
+      default: "",
+    },
 
-  // Reading status
-  status: {
-    type: String,
-    enum: ["tbr", "reading", "finished"],
-    default: "tbr"
-  },
+    image: {
+      type: String,
+      default: "",
+    },
 
-  // Optional dates
-  startDate: {
-    type: Date
-  },
+    googleBookId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
 
-  endDate: {
-    type: Date
-  },
+    // Reading status
+    status: {
+      type: String,
+      enum: ["tbr", "reading", "finished"],
+      default: "tbr",
+    },
 
-  // Optional rating and review
-  rating: {
-    type: Number,
-    min: 1,
-    max: 5
-  },
+    // Optional dates
+    startDate: {
+      type: Date,
+    },
 
-  review: {
-    type: String,
-    default: ""
+    endDate: {
+      type: Date,
+    },
+
+    // Optional rating and review
+    rating: {
+      type: Number,
+      min: 0,
+      max: 5,
+      default: 0,
+    },
+
+    review: {
+      type: String,
+      default: "",
+    },
+  },
+  {
+    timestamps: true,
   }
-}, {
-  timestamps: true
-});
+);
 
 module.exports = mongoose.model("Book", bookSchema);
