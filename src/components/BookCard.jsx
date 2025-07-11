@@ -95,7 +95,7 @@ function BookCard({ book }) {
               Start Date:
               <input
                 type="date"
-                value={shelfBook?.startDate || ""}
+                value={shelfBook?.startDate ? shelfBook.startDate.slice(0, 10) : ""}
                 onChange={handleStartDateChange}
                 className="date-input"
               />
@@ -105,7 +105,7 @@ function BookCard({ book }) {
               End Date:
               <input
                 type="date"
-                value={shelfBook?.endDate || ""}
+                value={shelfBook?.endDate ? shelfBook.endDate.slice(0, 10) : ""}
                 onChange={handleEndDateChange}
                 className="date-input"
               />

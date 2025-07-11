@@ -2,8 +2,6 @@ import { createContext, useState, useContext, useEffect } from "react";
 
 const BookContext = createContext();
 
-export const useBookContext = () => useContext(BookContext);
-
 export const BookProvider = ({ children }) => {
   const [shelf, setShelf] = useState([]);
   const [readingGoal, setReadingGoal] = useState(0);
@@ -61,52 +59,171 @@ export const BookProvider = ({ children }) => {
     }
   };
 
-  const removeFromShelf = (bookId) => {
-    setShelf((prev) => prev.filter((book) => book.googleBookId !== bookId));
-  };
+  const removeFromShelf = async (googleBookId) => {
+  try {
+    // Find the book by googleBookId to get its _id
+    const bookToDelete = shelf.find(book => book.googleBookId === googleBookId);
+    if (!bookToDelete) return;
+
+    await fetch(`http://localhost:5001/api/books/${bookToDelete._id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    // Update local state after successful delete
+    setShelf((prev) =>
+      prev.filter((book) => book._id !== bookToDelete._id)
+    );
+  } catch (err) {
+    console.error("Error deleting book:", err);
+  }
+};
+
 
   const onShelf = (bookId) => {
     return shelf.some((book) => book?.googleBookId === bookId);
   };
 
-  const updateStatus = (bookId, newStatus) => {
-    setShelf((prev) =>
-      prev.map((book) =>
-        book.googleBookId === bookId ? { ...book, status: newStatus } : book
-      )
-    );
+  const updateStatus = async (googleBookId, newStatus) => {
+    try {
+      const bookToUpdate = shelf.find(
+        (book) => book.googleBookId === googleBookId
+      );
+      if (!bookToUpdate) return;
+      const res = await fetch(
+        `http://localhost:5001/api/books/${bookToUpdate._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
+
+      const updatedBook = await res.json();
+
+      setShelf((prev) =>
+        prev.map((book) => (book.googleBookId === googleBookId ? updatedBook : book))
+      );
+      
+    } catch (err) {
+      console.error("Error updating status:", err);
+    }
   };
 
-  const updateRating = (bookId, newRating) => {
-    setShelf((prev) =>
-      prev.map((book) =>
-        book.googleBookId === bookId ? { ...book, rating: Number(newRating) } : book
-      )
-    );
+  const updateRating = async (googleBookId, newRating) => {
+    try {
+      const bookToUpdate = shelf.find(
+        (book) => book.googleBookId === googleBookId
+      );
+      if (!bookToUpdate) return;
+      const res = await fetch(
+        `http://localhost:5001/api/books/${bookToUpdate._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ rating: newRating }),
+        }
+      );
+
+      const updatedBook = await res.json();
+
+      setShelf((prev) =>
+        prev.map((book) => (book.googleBookId === googleBookId ? updatedBook : book))
+      );
+      
+    } catch (err) {
+      console.error("Error updating rating:", err);
+    }
   };
 
-  const updateReview = (bookId, newReview) => {
-    setShelf((prev) =>
-      prev.map((book) =>
-        book.googleBookId === bookId ? { ...book, review: newReview } : book
-      )
-    );
+  const updateReview = async (googleBookId, newReview) => {
+    try {
+      const bookToUpdate = shelf.find(
+        (book) => book.googleBookId === googleBookId
+      );
+      if (!bookToUpdate) return;
+      const res = await fetch(
+        `http://localhost:5001/api/books/${bookToUpdate._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ review: newReview }),
+        }
+      );
+
+      const updatedBook = await res.json();
+
+      setShelf((prev) =>
+        prev.map((book) => (book.googleBookId === googleBookId ? updatedBook : book))
+      );
+      
+    } catch (err) {
+      console.error("Error updating review:", err);
+    }
   };
 
-  const updateStartDate = (bookId, newStartDate) => {
-    setShelf((prev) =>
-      prev.map((book) =>
-        book.googleBookId === bookId ? { ...book, startDate: newStartDate } : book
-      )
-    );
+  const updateStartDate = async (googleBookId, newStartDate) => {
+    try {
+      const bookToUpdate = shelf.find(
+        (book) => book.googleBookId === googleBookId
+      );
+      if (!bookToUpdate) return;
+      const res = await fetch(
+        `http://localhost:5001/api/books/${bookToUpdate._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ startDate: newStartDate }),
+        }
+      );
+
+      const updatedBook = await res.json();
+
+      setShelf((prev) =>
+        prev.map((book) => (book.googleBookId === googleBookId ? updatedBook : book))
+      );
+      
+    } catch (err) {
+      console.error("Error updating start date:", err);
+    }
   };
 
-  const updateEndDate = (bookId, newEndDate) => {
-    setShelf((prev) =>
-      prev.map((book) =>
-        book.googleBookId === bookId ? { ...book, endDate: newEndDate } : book
-      )
-    );
+  const updateEndDate = async (googleBookId, newEndDate) => {
+    try {
+      const bookToUpdate = shelf.find(
+        (book) => book.googleBookId === googleBookId
+      );
+      if (!bookToUpdate) return;
+      const res = await fetch(
+        `http://localhost:5001/api/books/${bookToUpdate._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ endDate: newEndDate }),
+        }
+      );
+
+      const updatedBook = await res.json();
+
+      setShelf((prev) =>
+        prev.map((book) => (book.googleBookId === googleBookId ? updatedBook : book))
+      );
+      
+    } catch (err) {
+      console.error("Error updating end date:", err);
+    }
   };
 
   const value = {
@@ -125,3 +242,6 @@ export const BookProvider = ({ children }) => {
   };
   return <BookContext.Provider value={value}>{children}</BookContext.Provider>;
 };
+
+
+export const useBookContext = () => useContext(BookContext);
