@@ -83,18 +83,17 @@ const loginUser = asyncHandler(async (req, res) => {
         user: {
           username: user.username,
           email: user.email,
-          id: user.id,
+          id: user._id,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" } // Token expires in 15 minutes
+      { expiresIn: "24h" } // Token expires in 24 hours
     );
     res.status(200).json({ accessToken });
   } else {
     res.status(401);
     throw new Error("Email or password is not valid")
   }
-  res.json({ message: "login" });
 });
 
 /**
@@ -108,11 +107,56 @@ const loginUser = asyncHandler(async (req, res) => {
  */
 const currentUser = asyncHandler(async (req, res) => {
   // User information is available in req.user from JWT token
+  const user = await User.findById(req.user.id);
   res.status(200).json({
-    id: req.user._id,
-    name: req.user.name,
-    email: req.user.email
+    id: req.user.id,
+    username: req.user.username,
+    email: req.user.email,
+    readingGoal: user.readingGoal || 0
   });
 });
 
-module.exports = { registerUser, loginUser, currentUser };
+/**
+ * Update user's reading goal
+ * @desc Updates the reading goal for the authenticated user
+ * @route PUT /api/users/reading-goal
+ * @access Private - Requires valid JWT token
+ * @param {Object} req.body - Contains readingGoal
+ * @param {Object} res - Express response object
+ * @returns {Object} Updated user information
+ */
+const updateReadingGoal = asyncHandler(async (req, res) => {
+  const { readingGoal } = req.body;
+  
+  // Validate that readingGoal is provided and is a number
+  if (readingGoal === undefined || readingGoal === null) {
+    res.status(400);
+    throw new Error("Reading goal is required");
+  }
+  
+  if (typeof readingGoal !== 'number' || readingGoal < 0) {
+    res.status(400);
+    throw new Error("Reading goal must be a non-negative number");
+  }
+  
+  // Update the user's reading goal
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    { readingGoal },
+    { new: true }
+  );
+  
+  if (!updatedUser) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  
+  res.status(200).json({
+    id: updatedUser._id,
+    username: updatedUser.username,
+    email: updatedUser.email,
+    readingGoal: updatedUser.readingGoal
+  });
+});
+
+module.exports = { registerUser, loginUser, currentUser, updateReadingGoal };

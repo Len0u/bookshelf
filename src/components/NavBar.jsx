@@ -1,12 +1,18 @@
 import "../css/NavBar.css"
 import { Link, useLocation } from "react-router-dom"
-import { FaHome, FaBookOpen, FaChartBar } from "react-icons/fa"
+import { FaHome, FaBookOpen, FaChartBar, FaSignOutAlt } from "react-icons/fa"
+import { useAuth } from "../contexts/AuthContext";
 
 function NavBar() {
   const location = useLocation();
+  const { isAuthenticated, logout } = useAuth();
 
   const isActive = (path) => {
     return location.pathname === path;
+  };
+
+  const handleLogout = () => {
+    logout();
   };
 
   return (
@@ -41,6 +47,25 @@ function NavBar() {
             <FaChartBar className="nav-icon" />
             <span>Reading Stats</span>
           </Link>
+
+          {!isAuthenticated && (
+            <Link 
+              to="/login" 
+              className={`nav-link ${isActive('/login') ? 'active' : ''}`}
+            >
+              <span>Login</span>
+            </Link>
+          )}
+
+          {isAuthenticated && (
+            <button 
+              onClick={handleLogout}
+              className="nav-link logout-btn"
+            >
+              <FaSignOutAlt className="nav-icon" />
+              <span>Logout</span>
+            </button>
+          )}
         </div>
       </div>
     </nav>

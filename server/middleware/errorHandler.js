@@ -19,7 +19,22 @@ const { constants } = require("../constants");
  */
 const errorHandler = (err, req, res, next) => {
   // Get status code from response or default to 500 (Internal Server Error)
-  const statusCode = res.statusCode ? res.statusCode : 500;
+  let statusCode = res.statusCode ? res.statusCode : 500;
+  
+  // Handle MongoDB specific errors
+  if (err.name === 'MongoServerError' && err.code === 11000) {
+    // Duplicate key error
+    statusCode = constants.VALIDATION_ERROR;
+    err.message = 'Book already exists in your shelf';
+  } else if (err.name === 'ValidationError') {
+    // Mongoose validation error
+    statusCode = constants.VALIDATION_ERROR;
+    err.message = Object.values(err.errors).map(val => val.message).join(', ');
+  } else if (err.name === 'CastError') {
+    // Invalid ObjectId
+    statusCode = constants.NOT_FOUND;
+    err.message = 'Resource not found';
+  }
   
   // Handle different types of errors based on status code
   switch (statusCode) {
@@ -65,6 +80,11 @@ const errorHandler = (err, req, res, next) => {
 
     default:
       console.log("No error, all good!");
+      res.status(statusCode).json({
+        title: "Error",
+        message: err.message,
+        stackTrace: err.stack,
+      });
       break;
   }
 };

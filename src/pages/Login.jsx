@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,8 +27,8 @@ function Login() {
         return;
       }
 
-      // Save token and user info in localStorage
-      localStorage.setItem("user", JSON.stringify(data));
+      // Use the login function from AuthContext
+      login(data.accessToken);
       
       // Redirect to shelf/home
       navigate("/shelf");

@@ -4,6 +4,7 @@ require("dotenv").config();
 const connectDb = require("./config/dbConnection")
 const userRoutes = require("./routes/userRoutes");
 const bookRoutes = require("./routes/bookRoutes")
+const errorHandler = require("./middleware/errorHandler");
 
 connectDb();
 
@@ -29,6 +30,8 @@ app.get("/test", (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/books", bookRoutes);
 
+// Error handling middleware (must be last)
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

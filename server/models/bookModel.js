@@ -50,7 +50,6 @@ const bookSchema = mongoose.Schema(
     googleBookId: {
       type: String,
       required: true,
-      unique: true,
     },
 
     // Reading status
@@ -86,5 +85,8 @@ const bookSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Create compound index to ensure a user can't add the same book twice
+bookSchema.index({ user_id: 1, googleBookId: 1 }, { unique: true });
 
 module.exports = mongoose.model("Book", bookSchema);

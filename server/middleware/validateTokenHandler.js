@@ -29,6 +29,12 @@ const validateToken = asyncHandler(async (req, res, next) => {
     // Extract token from "Bearer <token>" format
     token = authHeader.split(" ")[1];
     
+    // Check if token exists after extraction
+    if (!token) {
+      res.status(401);
+      throw new Error("User is not authorized or token is missing");
+    }
+    
     // Verify the token using the secret key
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) {
@@ -40,12 +46,9 @@ const validateToken = asyncHandler(async (req, res, next) => {
       req.user = decoded.user;
       next();
     });
-    
-    // Check if token exists after extraction
-    if (!token) {
-      res.status(401);
-      throw new Error("User is not authorized or token is missing")
-    }
+  } else {
+    res.status(401);
+    throw new Error("Authorization header missing or invalid format");
   }
 })
 

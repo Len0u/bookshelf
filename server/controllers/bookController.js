@@ -22,7 +22,7 @@ const Book = require("../models/bookModel");
 const getBooks = asyncHandler(async (req, res) => {
   // Find all books where user_id matches the authenticated user's ID
   // For now, get all books since authentication is disabled
-  const books = await Book.find({});
+  const books = await Book.find({user_id: req.user.id });
   res.status(200).json(books);
 });
 
@@ -46,10 +46,20 @@ const createBook = asyncHandler(async (req, res) => {
     throw new Error("Title is required");
   }
 
-  // Create new contact and associate it with the authenticated user
-  // For now, use a default user_id since authentication is disabled
+  // Check if user already has this book
+  const existingBook = await Book.findOne({ 
+    user_id: req.user.id, 
+    googleBookId: googleBookId 
+  });
+
+  if (existingBook) {
+    res.status(400);
+    throw new Error("Book already exists in your shelf");
+  }
+
+  // Create new book and associate it with the authenticated user
   const book = await Book.create({
-    user_id: new mongoose.Types.ObjectId(), // Create a temporary user_id
+    user_id: req.user.id,
     title,
     author,
     genre,
@@ -84,13 +94,12 @@ const updateBook = asyncHandler(async (req, res) => {
   }
 
   // Ensure user can only update their own books
-  // For now, skip this check since authentication is disabled
-  // if (book.user_id.toString() !== req.user.id) {
-  //   res.status(403);
-  //   throw new Error(
-  //     "User doesn't have permission to update other user books"
-  //   );
-  // }
+  if (book.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error(
+      "User doesn't have permission to update other user books"
+    );
+  }
 
   // Update the book with new data
   const updatedBook = await Book.findByIdAndUpdate(
@@ -120,13 +129,12 @@ const deleteBook = asyncHandler(async (req, res) => {
   }
 
   // Ensure user can only delete their own books
-  // For now, skip this check since authentication is disabled
-  // if (book.user_id.toString() !== req.user.id) {
-  //   res.status(403);
-  //   throw new Error(
-  //     "User doesn't have permission to delete other user books"
-  //   );
-  // }
+  if (book.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error(
+      "User doesn't have permission to delete other user books"
+    );
+  }
 
   // Delete the book
   await Book.deleteOne({ _id: req.params.id });

@@ -26,11 +26,8 @@ function Register() {
         return;
       }
 
-      // Save token and user info in localStorage
-      localStorage.setItem("user", JSON.stringify(data));
-
-      // Redirect to shelf or homepage
-      navigate("/shelf");
+      // Registration successful, redirect to login
+      navigate("/login");
     } catch (err) {
       setError("Something went wrong.");
     }

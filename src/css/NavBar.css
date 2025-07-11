@@ -124,6 +124,19 @@
   letter-spacing: 0.5px;
 }
 
+.logout-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .nav-container {
@@ -156,6 +169,15 @@
   .nav-icon {
     font-size: 1.2rem;
   }
+
+  .logout-btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.85rem;
+  }
+  
+  .logout-btn span {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -173,6 +195,12 @@
   }
   
   .nav-link {
+    flex: 1;
+    justify-content: center;
+    max-width: 80px;
+  }
+
+  .logout-btn {
     flex: 1;
     justify-content: center;
     max-width: 80px;
