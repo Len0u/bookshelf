@@ -35,6 +35,11 @@ const userSchema = mongoose.Schema( {
     required: [true, "Please add the user password"],
   },
 
+  readingGoal: {
+    type: Number,
+    default: 0,
+  }
+
 }, {
   // Automatically add createdAt and updatedAt timestamps
   timestamps: true

@@ -23,7 +23,7 @@ function CurrentReads() {
       <h2>Currently Reading ({currentReads.length})</h2>
       <div className="current-reads-grid">
         {currentReads.map((book) => (
-          <BookCard book={book} key={book.id} />
+          <BookCard book={book} key={book.googleBookId} />
         ))}
       </div>
     </div>

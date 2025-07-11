@@ -33,10 +33,10 @@ function ReadingStats() {
 
   const genreCounts = {};
   shelf.forEach((b) => {
-    const genres = b.volumeInfo?.categories || [];
-    genres.forEach((g) => {
-      genreCounts[g] = (genreCounts[g] || 0) + 1;
-    });
+    const genre = b.genre || "";
+    
+      genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+
   });
 
   const topGenre =

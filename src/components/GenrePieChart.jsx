@@ -9,11 +9,11 @@ function GenrePieChart() {
   // Flatten all genres
   const genreCounts = {};
   shelf.forEach((book) => {
-    const categories = book.volumeInfo?.categories || [];
-    categories.forEach((cat) => {
-      const cleaned = cat.trim();
+    const categories = book.genre || "Other";
+    
+      const cleaned = categories.trim();
       genreCounts[cleaned] = (genreCounts[cleaned] || 0) + 1;
-    });
+
   });
 
   const data = Object.entries(genreCounts).map(([genre, count]) => ({

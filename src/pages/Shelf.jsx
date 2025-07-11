@@ -36,8 +36,8 @@ function Shelf() {
         return sortedBooks;
       case "author":
         return sortedBooks.sort((a, b) => {
-          const authorA = a.volumeInfo.authors?.[0] || "";
-          const authorB = b.volumeInfo.authors?.[0] || "";
+          const authorA = a.author || "";
+          const authorB = b.author || "";
           return authorA.localeCompare(authorB);
         });
       case "rating":
@@ -126,7 +126,7 @@ function Shelf() {
       </h2>
       <div className="book-grid">
         {books.map((book) => (
-          <BookCard book={book} key={book.id} />
+          <BookCard book={book} key={book.googleBookId} />
         ))}
       </div>
 

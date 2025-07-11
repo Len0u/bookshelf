@@ -94,7 +94,7 @@ function ReadingTimeline() {
         return startDateA - startDateB;
       }
       // If start dates are the same, sort by book ID for consistency
-      return a.id.localeCompare(b.id);
+      return a.googleBookId.localeCompare(b.googleBookId);
     });
   };
 
@@ -117,13 +117,13 @@ function ReadingTimeline() {
                   <div className="month-bar" style={{ height: `${barHeight}px` }}>
                     {sortedBooks.map((book, index) => (
                       <div 
-                        key={`${monthKey}-${book.id}`}
+                        key={`${monthKey}-${book.googleBookId}`}
                         className="bar-segment book-segment"
                         style={{ 
                           height: `${100 / totalBooks}%`,
                           backgroundColor: generatePositionColor(index)
                         }}
-                        title={`${book.volumeInfo.title} (${formatDate(book.startDate)} - ${formatDate(book.endDate)}) - ${book.status}`}
+                        title={`${book.title} (${formatDate(book.startDate)} - ${formatDate(book.endDate)}) - ${book.status}`}
                       >
                       </div>
                     ))}
