@@ -214,6 +214,7 @@ export const BookProvider = ({ children }) => {
 
 
   const onShelf = (bookId) => {
+    console.log("onShelf check:", { bookId, shelfLength: shelf.length }); // Debug: Check what's being searched
     return shelf.some((book) => book?.googleBookId === bookId);
   };
 
