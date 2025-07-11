@@ -108,6 +108,12 @@ const loginUser = asyncHandler(async (req, res) => {
 const currentUser = asyncHandler(async (req, res) => {
   // User information is available in req.user from JWT token
   const user = await User.findById(req.user.id);
+  
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  
   res.status(200).json({
     id: req.user.id,
     username: req.user.username,
