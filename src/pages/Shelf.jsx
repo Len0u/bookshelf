@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import BookCard from "../components/BookCard";
 import { useBookContext } from "../contexts/BookContext";
-import "../css/Shelf.css"
+import "../css/Shelf.css";
 
 function Shelf() {
   const [books, setBooks] = useState([]);
@@ -20,7 +20,7 @@ function Shelf() {
           : viewingShelf === "reading"
           ? shelf.filter((b) => b.status === "reading")
           : shelf;
-      
+
       // Sort the filtered books
       filtered = sortBooks(filtered, sortBy);
       setBooks(filtered);
@@ -29,11 +29,14 @@ function Shelf() {
 
   const sortBooks = (bookList, sortOption) => {
     const sortedBooks = [...bookList];
-    
+
     switch (sortOption) {
       case "dateAdded":
-        // Books are already in date added order from the context
-        return sortedBooks;
+        return sortedBooks.sort((a, b) => {
+          const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return timeB - timeA;
+        });
       case "author":
         return sortedBooks.sort((a, b) => {
           const authorA = a.author || "";
@@ -47,7 +50,7 @@ function Shelf() {
           return ratingB - ratingA; // Highest rating first
         });
       case "status":
-        const statusOrder = { "reading": 1, "tbr": 2, "finished": 3 };
+        const statusOrder = { reading: 1, tbr: 2, finished: 3 };
         return sortedBooks.sort((a, b) => {
           const statusA = statusOrder[a.status] || 0;
           const statusB = statusOrder[b.status] || 0;

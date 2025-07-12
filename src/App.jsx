@@ -5,13 +5,27 @@ import Shelf from "./pages/Shelf";
 import ReadingStats from "./pages/ReadingStats";
 import BookCard from "./components/BookCard";
 import { BookProvider } from "./contexts/BookContext";
-import { AuthProvider } from "./contexts/AuthContext";
-import { Routes, Route } from "react-router-dom";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { Routes, Route, Navigate } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import "./css/App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+  
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return children;
+};
 
 function App() {
   return (
@@ -21,8 +35,16 @@ function App() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/shelf" element={<Shelf />} />
-            <Route path="/goals" element={<ReadingStats />} />
+            <Route path="/shelf" element={
+              <ProtectedRoute>
+                <Shelf />
+              </ProtectedRoute>
+            } />
+            <Route path="/goals" element={
+              <ProtectedRoute>
+                <ReadingStats />
+              </ProtectedRoute>
+            } />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 

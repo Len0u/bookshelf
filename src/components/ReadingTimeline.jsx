@@ -7,10 +7,12 @@ function ReadingTimeline() {
   // Filter books that have start dates
   const booksWithDates = shelf.filter(book => book.startDate && book.endDate);
   
+  
   // Group books by month
-  const getMonthKey = (dateString) => {
-    const date = new Date(dateString);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+  const getMonthKey = (date) => {
+    // Handle both Date objects and date strings
+    const dateObj = date instanceof Date ? date : new Date(date);
+    return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`;
   };
 
   const getMonthName = (monthKey) => {
@@ -29,27 +31,20 @@ function ReadingTimeline() {
   const monthlyData = {};
   
   booksWithDates.forEach(book => {
-    const startDate = new Date(book.startDate);
-    const endDate = new Date(book.endDate);
+    // Get the date part from the ISO string to avoid timezone issues
+    const dateString = book.endDate.slice(0, 10); // "2024-01-01"
+    const [year, month, day] = dateString.split('-').map(Number);
+    const endDate = new Date(year, month - 1, day); // month is 0-indexed
+    const monthKey = getMonthKey(endDate);
     
-    // Get all months between start and end date
-    const currentDate = new Date(startDate);
-    while (currentDate <= endDate) {
-      const monthKey = getMonthKey(currentDate);
-      
-      if (!monthlyData[monthKey]) {
-        monthlyData[monthKey] = {
-          books: []
-        };
-      }
-      
-      // Add the book to this month
-      monthlyData[monthKey].books.push(book);
-      
-      // Move to next month
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      currentDate.setDate(1);
+    if (!monthlyData[monthKey]) {
+      monthlyData[monthKey] = {
+        books: []
+      };
     }
+    
+    // Add the book to the month when it was finished (endDate)
+    monthlyData[monthKey].books.push(book);
   });
 
   // Sort months chronologically
@@ -57,7 +52,10 @@ function ReadingTimeline() {
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    const date = new Date(dateString);
+    // Get the date part from the ISO string to avoid timezone issues
+    const datePart = dateString.slice(0, 10); // "2024-01-01"
+    const [year, month, day] = datePart.split('-').map(Number);
+    const date = new Date(year, month - 1, day); // month is 0-indexed
     return date.toLocaleDateString();
   };
 

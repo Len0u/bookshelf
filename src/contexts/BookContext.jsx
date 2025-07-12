@@ -115,6 +115,14 @@ export const BookProvider = ({ children }) => {
     }
   }, [isAuthenticated, logout, navigate]);
 
+  // Clear shelf when user is not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setShelf([]);
+      setReadingGoal(0);
+    }
+  }, [isAuthenticated]);
+
   const finishedCount = shelf.filter(
     (book) => book.status === "finished"
   ).length;

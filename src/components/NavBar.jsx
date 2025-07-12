@@ -1,10 +1,11 @@
 import "../css/NavBar.css"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { FaHome, FaBookOpen, FaChartBar, FaSignOutAlt } from "react-icons/fa"
 import { useAuth } from "../contexts/AuthContext";
 
 function NavBar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
 
   const isActive = (path) => {
@@ -13,6 +14,7 @@ function NavBar() {
 
   const handleLogout = () => {
     logout();
+    navigate("/login");
   };
 
   return (
