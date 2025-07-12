@@ -36,8 +36,6 @@ const getBooks = asyncHandler(async (req, res) => {
  * @returns {Object} The newly created contact object
  */
 const createBook = asyncHandler(async (req, res) => {
-  console.log("the req body: ", req.body);
-  console.log("User ID from token:", req.user.id); // Debug: Check user ID
   const { title, author, genre, image, googleBookId, status, startDate, endDate, rating, review } =
     req.body;
 
@@ -52,12 +50,6 @@ const createBook = asyncHandler(async (req, res) => {
     user_id: req.user.id, 
     googleBookId: googleBookId 
   });
-
-  console.log("Existing book check:", { 
-    user_id: req.user.id, 
-    googleBookId: googleBookId, 
-    found: !!existingBook 
-  }); // Debug: Check what the query finds
 
   if (existingBook) {
     res.status(400);

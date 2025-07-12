@@ -38,11 +38,9 @@ const registerUser = asyncHandler(async (req, res) => {
   
   // Hash the password using bcrypt with salt rounds of 10
   const hashedPassword = await bcrypt.hash(password, 10);
-  console.log("hashed", hashedPassword);
   
   // Create new user with hashed password
   const user = await User.create({ username, email, password: hashedPassword });
-  console.log(`User created ${user}`);
   
   if (user) {
     // Return user data without password

@@ -10,102 +10,97 @@ export const BookProvider = ({ children }) => {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
-  // Fetch user's reading goal
-  const fetchReadingGoal = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
+  /**
+   * Utility function for making authenticated API requests
+   * Handles token retrieval, headers setup, error handling, and 401 responses
+   * @param {string} url - The API endpoint URL
+   * @param {Object} options - Fetch options (method, body, etc.)
+   * @returns {Response|null} - Response object or null if request failed
+   */
+  const makeAuthenticatedRequest = async (url, options = {}) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error("No authentication token found");
+      return null;
+    }
 
-      const res = await fetch("http://localhost:5001/api/users/current", {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
+    const defaultOptions = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      ...options,
+    };
+
+    try {
+      const res = await fetch(url, defaultOptions);
       
       if (!res.ok) {
         if (res.status === 401) {
           console.error("Unauthorized - token may be invalid");
           logout();
           navigate("/login");
-          return;
+          return null;
         }
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       
+      return res;
+    } catch (err) {
+      console.error("API request failed:", err);
+      return null;
+    }
+  };
+
+  /**
+   * Utility function to find a book by its Google Book ID
+   * @param {string} googleBookId - The Google Book ID to search for
+   * @returns {Object|null} - The book object or null if not found
+   */
+  const findBookById = (googleBookId) => {
+    return shelf.find(book => book.googleBookId === googleBookId);
+  };
+
+  /**
+   * Utility function to update a book in the shelf state
+   * @param {string} googleBookId - The Google Book ID of the book to update
+   * @param {Object} updatedBook - The updated book object from the server
+   */
+  const updateBookInShelf = (googleBookId, updatedBook) => {
+    setShelf(prev => 
+      prev.map(book => book.googleBookId === googleBookId ? updatedBook : book)
+    );
+  };
+
+  /**
+   * Fetches the user's reading goal from the server
+   */
+  const fetchReadingGoal = async () => {
+    const res = await makeAuthenticatedRequest("http://localhost:5001/api/users/current");
+    if (res) {
       const userData = await res.json();
       setReadingGoal(userData.readingGoal || 0);
-    } catch (err) {
-      console.error("Failed to fetch reading goal:", err);
     }
   };
 
-  // Update reading goal in database
+  /**
+   * Updates the reading goal in the database
+   * @param {number} newGoal - The new reading goal value
+   */
   const updateReadingGoalInDB = async (newGoal) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
-
-      const res = await fetch("http://localhost:5001/api/users/reading-goal", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify({ readingGoal: newGoal }),
-      });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          console.error("Unauthorized - token may be invalid");
-          logout();
-          navigate("/login");
-          return;
-        }
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-    } catch (err) {
-      console.error("Failed to update reading goal:", err);
-    }
+    await makeAuthenticatedRequest("http://localhost:5001/api/users/reading-goal", {
+      method: "PUT",
+      body: JSON.stringify({ readingGoal: newGoal }),
+    });
   };
 
-  //get shelf with authentication
+  // Fetch books and reading goal when user is authenticated
   useEffect(() => {
     const fetchBooks = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          console.error("No authentication token found");
-          return;
-        }
-
-        const res = await fetch("http://localhost:5001/api/books", {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-        
-        if (!res.ok) {
-          if (res.status === 401) {
-            console.error("Unauthorized - token may be invalid");
-            logout();
-            navigate("/login");
-            return;
-          }
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        
+      const res = await makeAuthenticatedRequest("http://localhost:5001/api/books");
+      if (res) {
         const data = await res.json();
         setShelf(data);
-      } catch (err) {
-        console.error("Failed to fetch books:", err);
       }
     };
 
@@ -127,12 +122,19 @@ export const BookProvider = ({ children }) => {
     (book) => book.status === "finished"
   ).length;
 
-  // Wrapper for setReadingGoal that also updates the database
+  /**
+   * Wrapper for setReadingGoal that also updates the database
+   * @param {number} newGoal - The new reading goal value
+   */
   const updateReadingGoal = (newGoal) => {
     setReadingGoal(newGoal);
     updateReadingGoalInDB(newGoal);
   };
 
+  /**
+   * Adds a book to the user's shelf
+   * @param {Object} googleBook - The Google Books API book object
+   */
   const addToShelf = async (googleBook) => {
     const info = googleBook.volumeInfo;
     const normalizedBook = {
@@ -148,312 +150,84 @@ export const BookProvider = ({ children }) => {
       endDate: null,
     };
 
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
+    const res = await makeAuthenticatedRequest("http://localhost:5001/api/books", {
+      method: "POST",
+      body: JSON.stringify(normalizedBook),
+    });
 
-      const res = await fetch("http://localhost:5001/api/books", {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify(normalizedBook),
-      });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          console.error("Unauthorized - token may be invalid");
-          logout();
-          navigate("/login");
-          return;
-        }
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
+    if (res) {
       const newBook = await res.json();
       setShelf((prev) => [newBook, ...prev]);
-    } catch (err) {
-      console.error("Error adding book:", err);
     }
   };
 
+  /**
+   * Removes a book from the user's shelf
+   * @param {string} googleBookId - The Google Book ID of the book to remove
+   */
   const removeFromShelf = async (googleBookId) => {
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error("No authentication token found");
-      return;
-    }
-
-    // Find the book by googleBookId to get its _id
-    const bookToDelete = shelf.find(book => book.googleBookId === googleBookId);
+    const bookToDelete = findBookById(googleBookId);
     if (!bookToDelete) return;
 
-    const res = await fetch(`http://localhost:5001/api/books/${bookToDelete._id}`, {
+    const res = await makeAuthenticatedRequest(`http://localhost:5001/api/books/${bookToDelete._id}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      }
     });
 
-    if (!res.ok) {
-      if (res.status === 401) {
-        console.error("Unauthorized - token may be invalid");
-        logout();
-        navigate("/login");
-        return;
-      }
-      throw new Error(`HTTP error! status: ${res.status}`);
+    if (res) {
+      setShelf((prev) => prev.filter((book) => book._id !== bookToDelete._id));
     }
+  };
 
-    // Update local state after successful delete
-    setShelf((prev) =>
-      prev.filter((book) => book._id !== bookToDelete._id)
-    );
-  } catch (err) {
-    console.error("Error deleting book:", err);
-  }
-};
-
-
+  /**
+   * Checks if a book is already on the user's shelf
+   * @param {string} bookId - The Google Book ID to check
+   * @returns {boolean} - True if the book is on the shelf, false otherwise
+   */
   const onShelf = (bookId) => {
-    console.log("onShelf check:", { bookId, shelfLength: shelf.length }); // Debug: Check what's being searched
     return shelf.some((book) => book?.googleBookId === bookId);
   };
 
-  const updateStatus = async (googleBookId, newStatus) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
+  /**
+   * Generic function to update any book field
+   * @param {string} googleBookId - The Google Book ID of the book to update
+   * @param {string} fieldName - The name of the field to update
+   * @param {any} newValue - The new value for the field
+   * @param {string} errorMessage - Error message for logging (optional)
+   */
+  const updateBookField = async (googleBookId, fieldName, newValue, errorMessage) => {
+    const bookToUpdate = findBookById(googleBookId);
+    if (!bookToUpdate) return;
+    
+    const res = await makeAuthenticatedRequest(`http://localhost:5001/api/books/${bookToUpdate._id}`, {
+      method: "PUT",
+      body: JSON.stringify({ [fieldName]: newValue }),
+    });
 
-      const bookToUpdate = shelf.find(
-        (book) => book.googleBookId === googleBookId
-      );
-      if (!bookToUpdate) return;
-      
-      const res = await fetch(
-        `http://localhost:5001/api/books/${bookToUpdate._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-          body: JSON.stringify({ status: newStatus }),
-        }
-      );
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          console.error("Unauthorized - token may be invalid");
-          logout();
-          navigate("/login");
-          return;
-        }
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
+    if (res) {
       const updatedBook = await res.json();
-
-      setShelf((prev) =>
-        prev.map((book) => (book.googleBookId === googleBookId ? updatedBook : book))
-      );
-      
-    } catch (err) {
-      console.error("Error updating status:", err);
+      updateBookInShelf(googleBookId, updatedBook);
     }
+  };
+
+  // Specific update functions that use the generic updateBookField
+  const updateStatus = async (googleBookId, newStatus) => {
+    await updateBookField(googleBookId, 'status', newStatus, "Error updating status");
   };
 
   const updateRating = async (googleBookId, newRating) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
-
-      const bookToUpdate = shelf.find(
-        (book) => book.googleBookId === googleBookId
-      );
-      if (!bookToUpdate) return;
-      
-      const res = await fetch(
-        `http://localhost:5001/api/books/${bookToUpdate._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-          body: JSON.stringify({ rating: newRating }),
-        }
-      );
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          console.error("Unauthorized - token may be invalid");
-          logout();
-          navigate("/login");
-          return;
-        }
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
-      const updatedBook = await res.json();
-
-      setShelf((prev) =>
-        prev.map((book) => (book.googleBookId === googleBookId ? updatedBook : book))
-      );
-      
-    } catch (err) {
-      console.error("Error updating rating:", err);
-    }
+    await updateBookField(googleBookId, 'rating', newRating, "Error updating rating");
   };
 
   const updateReview = async (googleBookId, newReview) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
-
-      const bookToUpdate = shelf.find(
-        (book) => book.googleBookId === googleBookId
-      );
-      if (!bookToUpdate) return;
-      
-      const res = await fetch(
-        `http://localhost:5001/api/books/${bookToUpdate._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-          body: JSON.stringify({ review: newReview }),
-        }
-      );
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          console.error("Unauthorized - token may be invalid");
-          logout();
-          navigate("/login");
-          return;
-        }
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
-      const updatedBook = await res.json();
-
-      setShelf((prev) =>
-        prev.map((book) => (book.googleBookId === googleBookId ? updatedBook : book))
-      );
-      
-    } catch (err) {
-      console.error("Error updating review:", err);
-    }
+    await updateBookField(googleBookId, 'review', newReview, "Error updating review");
   };
 
   const updateStartDate = async (googleBookId, newStartDate) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
-
-      const bookToUpdate = shelf.find(
-        (book) => book.googleBookId === googleBookId
-      );
-      if (!bookToUpdate) return;
-      
-      const res = await fetch(
-        `http://localhost:5001/api/books/${bookToUpdate._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-          body: JSON.stringify({ startDate: newStartDate }),
-        }
-      );
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          console.error("Unauthorized - token may be invalid");
-          logout();
-          navigate("/login");
-          return;
-        }
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
-      const updatedBook = await res.json();
-
-      setShelf((prev) =>
-        prev.map((book) => (book.googleBookId === googleBookId ? updatedBook : book))
-      );
-      
-    } catch (err) {
-      console.error("Error updating start date:", err);
-    }
+    await updateBookField(googleBookId, 'startDate', newStartDate, "Error updating start date");
   };
 
   const updateEndDate = async (googleBookId, newEndDate) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
-
-      const bookToUpdate = shelf.find(
-        (book) => book.googleBookId === googleBookId
-      );
-      if (!bookToUpdate) return;
-      
-      const res = await fetch(
-        `http://localhost:5001/api/books/${bookToUpdate._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-          body: JSON.stringify({ endDate: newEndDate }),
-        }
-      );
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          console.error("Unauthorized - token may be invalid");
-          logout();
-          navigate("/login");
-          return;
-        }
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
-      const updatedBook = await res.json();
-
-      setShelf((prev) =>
-        prev.map((book) => (book.googleBookId === googleBookId ? updatedBook : book))
-      );
-      
-    } catch (err) {
-      console.error("Error updating end date:", err);
-    }
+    await updateBookField(googleBookId, 'endDate', newEndDate, "Error updating end date");
   };
 
   const value = {
@@ -472,6 +246,5 @@ export const BookProvider = ({ children }) => {
   };
   return <BookContext.Provider value={value}>{children}</BookContext.Provider>;
 };
-
 
 export const useBookContext = () => useContext(BookContext);

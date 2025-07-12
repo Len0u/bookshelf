@@ -1,40 +1,54 @@
 import { useBookContext } from "../contexts/BookContext";
 import "../css/ReadingTimeline.css";
 
+/**
+ * ReadingTimeline Component
+ * 
+ * Displays a visual timeline of reading activity grouped by month.
+ * Shows books as colored segments in monthly bars, with statistics
+ * about reading patterns. Only includes books with both start and end dates.
+ */
 function ReadingTimeline() {
   const { shelf } = useBookContext();
 
-  // Filter books that have start dates
+  // Filter books that have both start and end dates for timeline visualization
   const booksWithDates = shelf.filter(book => book.startDate && book.endDate);
   
-  
-  // Group books by month
+  /**
+   * Creates a consistent month key format (YYYY-MM) for grouping books
+   * Handles both Date objects and date strings to ensure compatibility
+   */
   const getMonthKey = (date) => {
-    // Handle both Date objects and date strings
     const dateObj = date instanceof Date ? date : new Date(date);
     return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`;
   };
 
+  /**
+   * Converts month key back to readable format (e.g., "Jan 2024")
+   */
   const getMonthName = (monthKey) => {
     const [year, month] = monthKey.split('-');
     const date = new Date(parseInt(year), parseInt(month) - 1);
     return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
   };
 
-  // Generate colors based on position (index)
+  /**
+   * Generates consistent colors for book segments based on their position
+   * Uses a predefined color palette that cycles through for visual variety
+   */
   const generatePositionColor = (index) => {
     const colors = ["#FF9CCF", "#7ED7FF", "#FFE799", "#9FD79D", "#BCA3E3", "#FF8C7A"];
     return colors[index % colors.length];
   };
 
-  // Create monthly data structure
+  // Group books by the month they were finished (endDate)
   const monthlyData = {};
   
   booksWithDates.forEach(book => {
-    // Get the date part from the ISO string to avoid timezone issues
+    // Extract date part from ISO string to avoid timezone issues
     const dateString = book.endDate.slice(0, 10); // "2024-01-01"
     const [year, month, day] = dateString.split('-').map(Number);
-    const endDate = new Date(year, month - 1, day); // month is 0-indexed
+    const endDate = new Date(year, month - 1, day); // month is 0-indexed in Date constructor
     const monthKey = getMonthKey(endDate);
     
     if (!monthlyData[monthKey]) {
@@ -47,18 +61,22 @@ function ReadingTimeline() {
     monthlyData[monthKey].books.push(book);
   });
 
-  // Sort months chronologically
+  // Sort months chronologically for proper timeline display
   const sortedMonths = Object.keys(monthlyData).sort();
 
+  /**
+   * Formats date strings to readable format, handling timezone issues
+   * by extracting only the date part from ISO strings
+   */
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    // Get the date part from the ISO string to avoid timezone issues
     const datePart = dateString.slice(0, 10); // "2024-01-01"
     const [year, month, day] = datePart.split('-').map(Number);
     const date = new Date(year, month - 1, day); // month is 0-indexed
     return date.toLocaleDateString();
   };
 
+  // Show empty state if no books have dates
   if (sortedMonths.length === 0) {
     return (
       <div className="reading-timeline">
@@ -71,18 +89,26 @@ function ReadingTimeline() {
     );
   }
 
-  // Calculate total books per month
+  /**
+   * Calculates the number of books finished in a specific month
+   */
   const getTotalBooksInMonth = (monthKey) => {
     return monthlyData[monthKey].books.length;
   };
 
+  /**
+   * Finds the month with the most books to calculate relative bar heights
+   */
   const getMaxBooksInMonth = () => {
     return Math.max(...sortedMonths.map(month => getTotalBooksInMonth(month)));
   };
 
   const maxBooks = getMaxBooksInMonth();
 
-  // Sort books consistently across all months
+  /**
+   * Sorts books consistently across all months for stable visualization
+   * Primary sort by start date, secondary by book ID for consistency
+   */
   const sortBooksForDisplay = (books) => {
     return books.sort((a, b) => {
       // First sort by start date
@@ -106,7 +132,7 @@ function ReadingTimeline() {
               const data = monthlyData[monthKey];
               const sortedBooks = sortBooksForDisplay(data.books);
               const totalBooks = sortedBooks.length;
-              const maxHeight = 200; // Maximum height in pixels
+              const maxHeight = 200; // Maximum height in pixels for visualization
               const barHeight = totalBooks > 0 ? (totalBooks / maxBooks) * maxHeight : 0;
               
               return (
@@ -140,6 +166,7 @@ function ReadingTimeline() {
         </div>
       </div>
       
+      {/* Reading statistics summary */}
       <div className="timeline-stats">
         <div className="stat-item">
           <span className="stat-label">Total Books:</span>

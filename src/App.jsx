@@ -1,9 +1,7 @@
-import { useState } from "react";
 import "./App.css";
 import Home from "./pages/Home";
 import Shelf from "./pages/Shelf";
 import ReadingStats from "./pages/ReadingStats";
-import BookCard from "./components/BookCard";
 import { BookProvider } from "./contexts/BookContext";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -12,7 +10,7 @@ import "./css/App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
-// Protected Route Component
+// Protected Route Component - ensures users are authenticated before accessing protected pages
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   

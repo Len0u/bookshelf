@@ -23,12 +23,6 @@ const validateToken = require("../middleware/validateTokenHandler.js");
 // Apply JWT authentication to all contact routes
 router.use(validateToken);
 
-// Add debugging middleware
-router.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`, req.body);
-  next();
-});
-
 /**
  * Book Routes Configuration
  * 

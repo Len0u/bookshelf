@@ -27,13 +27,13 @@ function Home() {
       const searchResults = await searchBooks(searchQuery);
       setBooks(searchResults);
     } catch (err) {
-      console.log(err);
-      setError("Failed to search books");
+      setError("Failed to search books. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Clear search results when query is empty
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setBooks([]);
