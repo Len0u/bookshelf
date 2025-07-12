@@ -1,4 +1,4 @@
-# 📚 BookLog - Personal Reading Tracker
+# BookLog - Personal Reading Tracker
 
 A full-stack app to track your reading journey. Built with React, Node.js, and MongoDB, BookLog helps you manage your personal library, set reading goals, and visualize your reading patterns.
 
@@ -42,7 +42,7 @@ A full-stack app to track your reading journey. Built with React, Node.js, and M
 ### External APIs
 - Google Books API – book search and metadata
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (v18+)
@@ -119,7 +119,7 @@ A full-stack app to track your reading journey. Built with React, Node.js, and M
 4. **Genre Analysis**: Discover your reading preferences
 5. **Rating Statistics**: Track your average ratings
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 booklog/
@@ -160,7 +160,7 @@ booklog/
 └── public/                # Static assets
 ```
 
-## 🔧 API Endpoints
+## API Endpoints
 
 ### Authentication
 - `POST /api/users/register` - User registration

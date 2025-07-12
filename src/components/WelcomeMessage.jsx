@@ -34,7 +34,7 @@ function WelcomeMessage() {
 
   return (
     <div className="welcome-message">
-      <h1 className="greeting">{greeting}, Bookworm! 📚</h1>
+      <h1 className="greeting">{greeting}, Bookworm!</h1>
       <p className="time">{time}</p>
       <p className="welcome-text">Ready to dive into your next great read?</p>
     </div>

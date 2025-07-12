@@ -21,7 +21,6 @@ function NavBar() {
     <nav className="navbar">
       <div className="nav-container">
         <div className="nav-brand">
-          <span className="brand-icon">📚</span>
           <span className="brand-text">BookLog</span>
         </div>
         
