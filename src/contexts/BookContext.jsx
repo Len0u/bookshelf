@@ -3,6 +3,7 @@ import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const BookContext = createContext();
+const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
 
 export const BookProvider = ({ children }) => {
   const [shelf, setShelf] = useState([]);
@@ -76,7 +77,7 @@ export const BookProvider = ({ children }) => {
    * Fetches the user's reading goal from the server
    */
   const fetchReadingGoal = async () => {
-    const res = await makeAuthenticatedRequest("http://localhost:5001/api/users/current");
+    const res = await makeAuthenticatedRequest(`${baseURL}/api/users/current`);
     if (res) {
       const userData = await res.json();
       setReadingGoal(userData.readingGoal || 0);
@@ -88,7 +89,7 @@ export const BookProvider = ({ children }) => {
    * @param {number} newGoal - The new reading goal value
    */
   const updateReadingGoalInDB = async (newGoal) => {
-    await makeAuthenticatedRequest("http://localhost:5001/api/users/reading-goal", {
+    await makeAuthenticatedRequest(`${baseURL}/api/users/reading-goal`, {
       method: "PUT",
       body: JSON.stringify({ readingGoal: newGoal }),
     });
@@ -97,7 +98,7 @@ export const BookProvider = ({ children }) => {
   // Fetch books and reading goal when user is authenticated
   useEffect(() => {
     const fetchBooks = async () => {
-      const res = await makeAuthenticatedRequest("http://localhost:5001/api/books");
+      const res = await makeAuthenticatedRequest(`${baseURL}/api/books`);
       if (res) {
         const data = await res.json();
         setShelf(data);
@@ -150,7 +151,7 @@ export const BookProvider = ({ children }) => {
       endDate: null,
     };
 
-    const res = await makeAuthenticatedRequest("http://localhost:5001/api/books", {
+    const res = await makeAuthenticatedRequest(`${baseURL}/api/books`, {
       method: "POST",
       body: JSON.stringify(normalizedBook),
     });
@@ -169,7 +170,7 @@ export const BookProvider = ({ children }) => {
     const bookToDelete = findBookById(googleBookId);
     if (!bookToDelete) return;
 
-    const res = await makeAuthenticatedRequest(`http://localhost:5001/api/books/${bookToDelete._id}`, {
+    const res = await makeAuthenticatedRequest(`${baseURL}/api/books/${bookToDelete._id}`, {
       method: "DELETE",
     });
 
@@ -198,7 +199,7 @@ export const BookProvider = ({ children }) => {
     const bookToUpdate = findBookById(googleBookId);
     if (!bookToUpdate) return;
     
-    const res = await makeAuthenticatedRequest(`http://localhost:5001/api/books/${bookToUpdate._id}`, {
+    const res = await makeAuthenticatedRequest(`${baseURL}/api/books/${bookToUpdate._id}`, {
       method: "PUT",
       body: JSON.stringify({ [fieldName]: newValue }),
     });

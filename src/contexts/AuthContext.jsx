@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
+const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -17,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   // Check if token is valid
   const validateToken = async (token) => {
     try {
-      const response = await fetch("http://localhost:5001/api/users/current", {
+      const response = await fetch(`${baseURL}/api/users/current`, {
         headers: {
           "Authorization": `Bearer ${token}`,
         },
