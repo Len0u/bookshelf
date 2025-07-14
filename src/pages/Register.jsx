@@ -9,12 +9,14 @@ function Register() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const response = await fetch("http://localhost:5001/api/users/register", {
+      const response = await fetch(`${baseURL}/api/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: name, email, password }),
