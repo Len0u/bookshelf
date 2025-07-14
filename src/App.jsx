@@ -1,4 +1,3 @@
-import "./App.css";
 import Home from "./pages/Home";
 import Shelf from "./pages/Shelf";
 import ReadingStats from "./pages/ReadingStats";
