@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { searchBooks } from "../services/api";
-import BookCard from "../components/BookCard";
 import SearchBookCard from "../components/SearchBookCard";
 import { useBookContext } from "../contexts/BookContext";
 import WelcomeMessage from "../components/WelcomeMessage";
@@ -75,7 +74,7 @@ function Home() {
         </div>
       ) : searchQuery && books.length === 0 ? (
         <div className="no-results">
-          <p>No books found for "{searchQuery}"</p>
+          <p>Looking for..."{searchQuery}"</p>
         </div>
       ) : (
         <div className="home-dashboard">

@@ -30,7 +30,7 @@ function RatingsPieChart() {
 
   return (
     <div style={{ width: "100%", maxWidth: "500px", margin: "2rem auto" }}>
-      <h3 style={{ textAlign: "center" }}>Books ByYour Ratings</h3>
+      <h3 style={{ textAlign: "center" }}>Books By Your Ratings</h3>
       <PieChart width={400} height={300}>
         <Pie
           dataKey="value"

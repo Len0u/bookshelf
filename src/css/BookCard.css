@@ -25,7 +25,6 @@
 }
 
 .book-thumbnail {
-  width: 100%;
   aspect-ratio: 2/3;
   margin: auto;
   position: relative;

@@ -19,7 +19,7 @@ export const BookProvider = ({ children }) => {
    * @returns {Response|null} - Response object or null if request failed
    */
   const makeAuthenticatedRequest = async (url, options = {}) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
       console.error("No authentication token found");
       return null;
@@ -28,14 +28,14 @@ export const BookProvider = ({ children }) => {
     const defaultOptions = {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       ...options,
     };
 
     try {
       const res = await fetch(url, defaultOptions);
-      
+
       if (!res.ok) {
         if (res.status === 401) {
           console.error("Unauthorized - token may be invalid");
@@ -45,7 +45,7 @@ export const BookProvider = ({ children }) => {
         }
         throw new Error(`HTTP error! status: ${res.status}`);
       }
-      
+
       return res;
     } catch (err) {
       console.error("API request failed:", err);
@@ -59,7 +59,7 @@ export const BookProvider = ({ children }) => {
    * @returns {Object|null} - The book object or null if not found
    */
   const findBookById = (googleBookId) => {
-    return shelf.find(book => book.googleBookId === googleBookId);
+    return shelf.find((book) => book.googleBookId === googleBookId);
   };
 
   /**
@@ -68,8 +68,10 @@ export const BookProvider = ({ children }) => {
    * @param {Object} updatedBook - The updated book object from the server
    */
   const updateBookInShelf = (googleBookId, updatedBook) => {
-    setShelf(prev => 
-      prev.map(book => book.googleBookId === googleBookId ? updatedBook : book)
+    setShelf((prev) =>
+      prev.map((book) =>
+        book.googleBookId === googleBookId ? updatedBook : book
+      )
     );
   };
 
@@ -119,10 +121,6 @@ export const BookProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
-  const finishedCount = shelf.filter(
-    (book) => book.status === "finished"
-  ).length;
-
   /**
    * Wrapper for setReadingGoal that also updates the database
    * @param {number} newGoal - The new reading goal value
@@ -170,9 +168,12 @@ export const BookProvider = ({ children }) => {
     const bookToDelete = findBookById(googleBookId);
     if (!bookToDelete) return;
 
-    const res = await makeAuthenticatedRequest(`${baseURL}/api/books/${bookToDelete._id}`, {
-      method: "DELETE",
-    });
+    const res = await makeAuthenticatedRequest(
+      `${baseURL}/api/books/${bookToDelete._id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (res) {
       setShelf((prev) => prev.filter((book) => book._id !== bookToDelete._id));
@@ -195,14 +196,22 @@ export const BookProvider = ({ children }) => {
    * @param {any} newValue - The new value for the field
    * @param {string} errorMessage - Error message for logging (optional)
    */
-  const updateBookField = async (googleBookId, fieldName, newValue, errorMessage) => {
+  const updateBookField = async (
+    googleBookId,
+    fieldName,
+    newValue,
+    errorMessage
+  ) => {
     const bookToUpdate = findBookById(googleBookId);
     if (!bookToUpdate) return;
-    
-    const res = await makeAuthenticatedRequest(`${baseURL}/api/books/${bookToUpdate._id}`, {
-      method: "PUT",
-      body: JSON.stringify({ [fieldName]: newValue }),
-    });
+
+    const res = await makeAuthenticatedRequest(
+      `${baseURL}/api/books/${bookToUpdate._id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ [fieldName]: newValue }),
+      }
+    );
 
     if (res) {
       const updatedBook = await res.json();
@@ -212,23 +221,48 @@ export const BookProvider = ({ children }) => {
 
   // Specific update functions that use the generic updateBookField
   const updateStatus = async (googleBookId, newStatus) => {
-    await updateBookField(googleBookId, 'status', newStatus, "Error updating status");
+    await updateBookField(
+      googleBookId,
+      "status",
+      newStatus,
+      "Error updating status"
+    );
   };
 
   const updateRating = async (googleBookId, newRating) => {
-    await updateBookField(googleBookId, 'rating', newRating, "Error updating rating");
+    await updateBookField(
+      googleBookId,
+      "rating",
+      newRating,
+      "Error updating rating"
+    );
   };
 
   const updateReview = async (googleBookId, newReview) => {
-    await updateBookField(googleBookId, 'review', newReview, "Error updating review");
+    await updateBookField(
+      googleBookId,
+      "review",
+      newReview,
+      "Error updating review"
+    );
   };
 
   const updateStartDate = async (googleBookId, newStartDate) => {
-    await updateBookField(googleBookId, 'startDate', newStartDate, "Error updating start date");
+    await updateBookField(
+      googleBookId,
+      "startDate",
+      newStartDate,
+      "Error updating start date"
+    );
   };
 
   const updateEndDate = async (googleBookId, newEndDate) => {
-    await updateBookField(googleBookId, 'endDate', newEndDate, "Error updating end date");
+    await updateBookField(
+      googleBookId,
+      "endDate",
+      newEndDate,
+      "Error updating end date"
+    );
   };
 
   const value = {
@@ -239,7 +273,6 @@ export const BookProvider = ({ children }) => {
     updateStatus,
     readingGoal,
     setReadingGoal: updateReadingGoal,
-    finishedCount,
     updateRating,
     updateReview,
     updateStartDate,

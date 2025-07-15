@@ -6,7 +6,7 @@ import ProgressBar from "../components/ProgressBar";
 import "../css/ReadingGoals.css";
 
 function ReadingStats() {
-  const { shelf, readingGoal, setReadingGoal, finishedCount } =
+  const { shelf, readingGoal, setReadingGoal } =
     useBookContext();
 
   const handleChange = (e) => {
@@ -34,9 +34,8 @@ function ReadingStats() {
   const genreCounts = {};
   shelf.forEach((b) => {
     const genre = b.genre || "";
-    
-      genreCounts[genre] = (genreCounts[genre] || 0) + 1;
 
+    genreCounts[genre] = (genreCounts[genre] || 0) + 1;
   });
 
   const topGenre =
@@ -46,19 +45,19 @@ function ReadingStats() {
     <div className="reading-goals-container">
       <div className="reading-stats">
         <div className="goal-section">
-          <h2>📚 Reading Goal</h2>
+          <h2>{new Date().getFullYear()} Reading Goal</h2>
           <p className="goal-description">
             Set your reading target for this year and track your progress!
           </p>
-          
+
           <div className="goal-input-container">
             <div className="goal-input-group">
               <label className="goal-label">
                 Books you want to finish this year:
               </label>
               <div className="goal-input-wrapper">
-                <button 
-                  className="goal-btn goal-btn-decrement" 
+                <button
+                  className="goal-btn goal-btn-decrement"
                   onClick={handleDecrement}
                   disabled={readingGoal <= 0}
                 >
@@ -72,8 +71,8 @@ function ReadingStats() {
                   className="goal-input"
                   placeholder="Enter your goal"
                 />
-                <button 
-                  className="goal-btn goal-btn-increment" 
+                <button
+                  className="goal-btn goal-btn-increment"
                   onClick={handleIncrement}
                 >
                   +
@@ -82,9 +81,10 @@ function ReadingStats() {
             </div>
           </div>
         </div>
-        
-        <ProgressBar />
 
+        <ProgressBar />
+      </div>
+      <div className="reading-stats">
         <div className="pie-charts">
           <div className="rating-pie-chart">
             {avgRating && <p>Average Rating: {avgRating} ⭐</p>}
@@ -96,10 +96,9 @@ function ReadingStats() {
           </div>
         </div>
       </div>
-
       <ReadingTimeline />
     </div>
   );
 }
 
-export default ReadingStats; 
+export default ReadingStats;

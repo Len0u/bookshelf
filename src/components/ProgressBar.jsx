@@ -2,20 +2,28 @@ import { useBookContext } from "../contexts/BookContext";
 import "../css/ProgressBar.css";
 
 function ProgressBar({ variant = "default" }) {
-  const { shelf, readingGoal, finishedCount } = useBookContext();
+  const { shelf, readingGoal } = useBookContext();
 
-  const progress = readingGoal === 0 ? 0 : Math.min(100, (finishedCount / readingGoal) * 100);
-  const booksRemaining = Math.max(0, readingGoal - finishedCount);
+  const currentYear = new Date().getFullYear()
+
+  const yearlyFinishedCount = shelf.filter((book) => {
+    if (book.status !== "finished" || !book.endDate) return false;
+    const endYear = +book.endDate.slice(0, 4);
+    return endYear === currentYear;
+  }).length;
+
+  const progress = readingGoal === 0 ? 0 : Math.min(100, (yearlyFinishedCount / readingGoal) * 100);
+  const booksRemaining = Math.max(0, readingGoal - yearlyFinishedCount);
   const currentReads = shelf.filter(book => book.status === "reading").length;
   const tbrCount = shelf.filter(book => book.status === "tbr").length;
 
   return (
     <div className="progress-section">
       <div className="progress-header">
-        <h2>Reading Progress</h2>
+        <h2>{currentYear} Reading Progress</h2>
         <div className="progress-stats">
           <span className="stat-item">
-            <span className="stat-number">{finishedCount}</span>
+            <span className="stat-number">{yearlyFinishedCount}</span>
             <span className="stat-label">Finished</span>
           </span>
           <span className="stat-item">
@@ -32,7 +40,7 @@ function ProgressBar({ variant = "default" }) {
       <div className="goal-progress">
         <div className="goal-info">
           <span className="goal-text">
-            {finishedCount} of {readingGoal} books completed
+            {yearlyFinishedCount} of {readingGoal} books completed
           </span>
           <span className="goal-percentage">{progress.toFixed(0)}%</span>
         </div>
