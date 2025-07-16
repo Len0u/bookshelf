@@ -2,6 +2,14 @@
 
 A full-stack app to track your reading journey. Built with React, Node.js, and MongoDB, BookLog helps you manage your personal library, set reading goals, and visualize your reading patterns.
 
+## Deployment
+
+BookLog is live
+
+- Frontend: https://bookshelf-woad-two.vercel.app
+- Backend API: https://bookshelf-aey4.onrender.com (Free Render instance may take up to 50 seconds to wake from inactivity)
+You can register a new account and try the app in your browser. All features are fully functional.
+
 ## Features
 
 ### Book Management
