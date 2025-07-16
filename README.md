@@ -4,11 +4,13 @@ A full-stack app to track your reading journey. Built with React, Node.js, and M
 
 ## Deployment
 
-BookLog is live
+BookLog is live!  
+You can try the app here:
 
-- Frontend: https://bookshelf-woad-two.vercel.app
-- Backend API: https://bookshelf-aey4.onrender.com (Free Render instance may take up to 50 seconds to wake from inactivity)
-You can register a new account and try the app in your browser. All features are fully functional.
+- **Live Demo**: [https://bookshelf-woad-two.vercel.app](https://bookshelf-woad-two.vercel.app)
+
+> The backend is hosted on Render (free tier), so the app may take a few seconds to load initially due to server spin-up time.
+
 
 ## Features
 
